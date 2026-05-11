@@ -1,0 +1,75 @@
+Listen = "0.0.0.0:5678"
+ProxyURL = ""
+MysqlDns = "root:mhSCk0NheGhmtsha@tcp(geekai-mysql:3306)/chatgpt_plus?charset=utf8mb4&collation=utf8mb4_unicode_ci&parseTime=True&loc=Local"
+StaticDir = "./static"
+StaticUrl = "/static"
+TikaHost = "http://geekai-tika:9998"
+
+[Session]
+  SecretKey = "azyehq3ivunjhbntz78isj00i4hz2mt9xtddysfucxakadq4qbfrt0b7q3lnvg80"
+  MaxAge = 86400
+
+[Redis]
+  Host = "geekai-redis"
+  Port = 6379
+  Password = "mhSCk0NheGhmtsha"
+  DB = 0
+
+[ApiConfig]
+  ApiURL = "https://sapi.geekai.me"
+  AppId = ""
+  Token = ""
+
+[SMS]
+   Active = "Ali"
+   [SMS.Bao]
+      Username = ""
+      Password = ""
+      Domain = "api.smsbao.com"
+      Sign = "【极客学长】"
+      CodeTemplate = "您的验证码是{code}。5分钟有效，若非本人操作，请忽略本短信。"
+   [SMS.Ali]
+      AccessKey = ""
+      AccessSecret = ""
+      Product = "Dysmsapi"
+      Domain = "dysmsapi.aliyuncs.com"
+      Sign = ""
+      CodeTempId = ""
+
+[OSS]
+   Active = "local"
+   [OSS.Local]
+     BasePath = "./static/upload"
+     BaseURL = "http://localhost:8080/static/upload"
+
+[XXLConfig]
+  Enabled = false
+  ServerAddr = "http://172.22.11.47:8080/xxl-job-admin"
+  ExecutorIp = "172.22.11.47"
+  ExecutorPort = "9999"
+  AccessToken = "xxl-job-api-token"
+  RegistryKey = "chatgpt-plus"
+
+[SmtpConfig]
+   UseTls = false
+   Host = "smtp.163.com"
+   Port = 25
+   AppName = "极客学长"
+   From = "test@163.com"
+   Password = ""
+
+[AlipayConfig]
+  Enabled = false
+
+[HuPiPayConfig]
+  Enabled = false
+
+[WechatPayConfig]
+  Enabled = false
+
+[GeekPayConfig]
+  Enabled = true
+  AppId = ""
+  PrivateKey = ""
+  ApiURL = "https://pay.geekai.cn"
+  Methods = ["alipay", "wxpay", "qqpay", "jdpay", "douyin", "paypal"]

@@ -1,0 +1,1 @@
+import{_ as a,b as n,e,P as r,r as o,j as l}from"./index-B_y5ZdCZ.js";const c={__name:"404",setup(i){const t=o(window.innerHeight);return(_,s)=>(l(),n("div",{class:"page-404",style:r({height:t.value+"px"})},[...s[0]||(s[0]=[e("div",{class:"inner"},[e("h1",null,"404"),e("h2",null,"饶了地球一圈，还是没有找到您要的页面")],-1)])],4))}},d=a(c,[["__scopeId","data-v-c996f3df"]]);export{d as default};
