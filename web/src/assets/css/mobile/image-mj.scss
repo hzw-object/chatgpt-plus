@@ -82,6 +82,10 @@
     padding: 10px;
     line-height: 1.5;
     color: #c1c1c1;
+
+    .dark & {
+      color: #9ca3af;
+    }
   }
 
   .running-job-list {
@@ -107,6 +111,10 @@
             left: 0;
             top: 0;
 
+            .dark & {
+              background: rgba(100, 100, 100, 0.5);
+            }
+
             .van-circle__text {
               color: #ffffff;
             }
@@ -119,6 +127,10 @@
             flex-flow: column;
             justify-content: center;
             color: #c1c1c1;
+
+            .dark & {
+              color: #9ca3af;
+            }
 
             .icon {
               text-align: center;
@@ -165,6 +177,10 @@
                 color: #ffffff;
                 font-size: 14px;
                 width: 100%;
+
+                .dark & {
+                  background-color: #374151;
+                }
               }
             }
 
@@ -201,6 +217,10 @@
               text-align: center;
               color: #ee0a24;
               font-size: 18px;
+
+              .dark & {
+                color: #f87171;
+              }
             }
             .opt {
               display: flex;

@@ -200,7 +200,7 @@
 
     <!-- 语言选择 -->
     <van-action-sheet v-model:show="showLanguageSelect" title="选择语言">
-      <div class="language-options">
+      <div class="language-options dark:bg-slate-900">
         <van-cell
           v-for="lang in languages"
           :key="lang.code"
@@ -209,7 +209,7 @@
           @click="selectLanguage(lang)"
         >
           <template #right-icon>
-            <van-icon v-if="currentLanguage.code === lang.code" name="success" color="#07c160" />
+            <van-icon v-if="currentLanguage.code === lang.code" name="success" class="dark:text-emerald-500" />
           </template>
         </van-cell>
       </div>
@@ -217,7 +217,7 @@
 
     <!-- 模型选择 -->
     <van-action-sheet v-model:show="showModelSelect" title="选择默认模型">
-      <div class="model-options">
+      <div class="model-options dark:bg-slate-900">
         <van-cell
           v-for="model in models"
           :key="model.code"
@@ -227,7 +227,7 @@
           @click="selectModel(model)"
         >
           <template #right-icon>
-            <van-icon v-if="currentModel.code === model.code" name="success" color="#07c160" />
+            <van-icon v-if="currentModel.code === model.code" name="success" class="dark:text-emerald-500" />
           </template>
         </van-cell>
       </div>
@@ -235,7 +235,7 @@
 
     <!-- 发送方式选择 -->
     <van-action-sheet v-model:show="showSendModeSelect" title="选择发送方式">
-      <div class="send-mode-options">
+      <div class="send-mode-options dark:bg-slate-900">
         <van-cell
           v-for="mode in sendModes"
           :key="mode.code"
@@ -245,7 +245,7 @@
           @click="selectSendMode(mode)"
         >
           <template #right-icon>
-            <van-icon v-if="currentSendMode.code === mode.code" name="success" color="#07c160" />
+            <van-icon v-if="currentSendMode.code === mode.code" name="success" class="dark:text-emerald-500" />
           </template>
         </van-cell>
       </div>

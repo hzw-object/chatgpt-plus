@@ -1,6 +1,6 @@
 <template>
-  <div class="basic-config form" v-loading="loading">
-    <div class="container">
+  <div class="basic-config form dark:bg-slate-900" v-loading="loading">
+    <div class="container dark:bg-slate-800 dark:text-white">
       <el-form
         :model="system"
         label-position="top"
@@ -8,7 +8,7 @@
         ref="systemFormRef"
         :rules="rules"
       >
-        <div class="basic-config-form">
+        <div class="basic-config-form dark:bg-slate-800 dark:rounded-lg dark:shadow-slate-900/50">
           <el-form-item label="网站标题" prop="title">
             <el-input v-model="system['title']" />
           </el-form-item>
@@ -54,7 +54,7 @@
             <template #label>
               <div class="label-title">
                 首页导航菜单
-                <span class="text-xs text-gray-500">（被选中的菜单将会在首页导航栏显示）</span>
+                <span class="text-xs text-gray-500 dark:text-gray-400">（被选中的菜单将会在首页导航栏显示）</span>
               </div>
             </template>
             <el-select
@@ -84,7 +84,7 @@
             <template #label>
               <div class="label-title">
                 开放注册
-                <span class="text-xs text-gray-500">（关闭注册之后只能通过管理后台添加用户）</span>
+                <span class="text-xs text-gray-500 dark:text-gray-400">（关闭注册之后只能通过管理后台添加用户）</span>
               </div>
             </template>
             <el-switch v-model="system['enabled_register']" />
@@ -122,7 +122,7 @@
             <template #label>
               <div class="label-title">
                 系统辅助AI模型
-                <span class="text-xs text-gray-500"
+                <span class="text-xs text-gray-500 dark:text-gray-400"
                   >（用来辅助用户生成提示词，翻译的AI模型，默认使用 gpt-4o-mini）</span
                 >
               </div>
@@ -159,7 +159,7 @@
             <template #label>
               <div class="label-title">
                 SD反向提示词
-                <span class="text-xs text-gray-500">（Stable-Diffusion 绘画默认反向提示词）</span>
+                <span class="text-xs text-gray-500 dark:text-gray-400">（Stable-Diffusion 绘画默认反向提示词）</span>
               </div>
             </template>
             <el-input type="textarea" :rows="2" v-model="system['sd_neg_prompt']" placeholder="" />
@@ -169,7 +169,7 @@
             <template #label>
               <div class="label-title">
                 订单支付超时时间
-                <span class="text-xs text-gray-500">（订单支付超时时间，单位：分钟）</span>
+                <span class="text-xs text-gray-500 dark:text-gray-400">（订单支付超时时间，单位：分钟）</span>
               </div>
             </template>
             <el-input-number
@@ -195,7 +195,7 @@
             <template #label>
               <div class="label-title">
                 上传文件限制
-                <span class="text-xs text-gray-500">（最大上传文件大小，单位：MB）</span>
+                <span class="text-xs text-gray-500 dark:text-gray-400">（最大上传文件大小，单位：MB）</span>
               </div>
             </template>
             <el-input
@@ -332,8 +332,9 @@ const uploadImg = (file) => {
     }
   }
 
-  .el-form-item__label {
+  :deep(.el-form-item__label) {
     font-weight: 700;
+    color: var(--el-text-color-primary);
   }
 }
 </style>

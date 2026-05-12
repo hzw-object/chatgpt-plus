@@ -1,8 +1,8 @@
 <template>
-  <div class="container chat-page">
+  <div class="container chat-page bg-white dark:bg-slate-900">
     <el-tabs v-model="activeName" @tab-change="handleChange">
       <el-tab-pane label="对话列表" name="chat" v-loading="data.chat.loading">
-        <div class="handle-box">
+        <div class="handle-box dark:bg-slate-800">
           <el-input
             v-model.number="data.chat.query.user_id"
             placeholder="账户ID"
@@ -81,7 +81,7 @@
         </div>
       </el-tab-pane>
       <el-tab-pane label="消息记录" name="message">
-        <div class="handle-box">
+        <div class="handle-box dark:bg-slate-800">
           <el-input
             v-model.number="data.message.query.user_id"
             placeholder="账户ID"
@@ -175,7 +175,7 @@
       class="chat-dialog"
       style="--el-dialog-width: 60%"
     >
-      <div class="chat-detail">
+      <div class="chat-detail dark:bg-slate-900 dark:text-slate-300">
         <div class="chat-line" v-html="dialogContent"></div>
       </div>
     </el-dialog>
@@ -186,7 +186,7 @@
       class="chat-dialog"
       style="--el-dialog-width: 60%"
     >
-      <div class="chat-box chat-page p-2">
+      <div class="chat-box chat-page p-2 dark:bg-slate-900">
         <div v-for="item in messages" :key="item.id">
           <chat-prompt v-if="item.type === 'prompt'" :data="item" />
           <chat-reply v-else-if="item.type === 'reply'" :read-only="true" :data="item" />
@@ -406,6 +406,10 @@ const showMessages = (row) => {
     // 变量定义
     --content-font-size: 16px;
     --content-color: #c1c1c1;
+
+    @media (prefers-color-scheme: dark) {
+      --content-color: #e0e0e0;
+    }
 
     font-family: 'Microsoft YaHei', '微软雅黑', Arial, sans-serif;
     max-height: 90vh;

@@ -1,12 +1,13 @@
 <template>
-  <div
-    class="page-iframe"
-    v-loading="loading"
-    style="--el-color-primary: #47fff1"
-    element-loading-text="页面正在加载中..."
-    element-loading-background="rgba(122, 122, 122, 0.8)"
-  >
-    <iframe :src="externalUrl" class="iframe" @load="onIframeLoad"></iframe>
+  <div class="page-iframe relative w-full h-screen overflow-hidden">
+    <!-- Loading overlay -->
+    <div v-if="loading" class="absolute inset-0 flex items-center justify-center bg-slate-800/80 z-10">
+      <div class="text-center">
+        <div class="w-12 h-12 border-4 border-violet-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+        <p class="text-white">页面正在加载中...</p>
+      </div>
+    </div>
+    <iframe :src="externalUrl" class="iframe w-full h-full border-none" @load="onIframeLoad"></iframe>
   </div>
 </template>
 <script setup>
@@ -28,16 +29,10 @@ const onIframeLoad = () => {
 }
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 .page-iframe {
   width: 100%;
   height: 100vh;
   overflow: hidden;
-
-  .iframe {
-    width: 100%;
-    height: 100%;
-    border: none;
-  }
 }
 </style>

@@ -1,9 +1,9 @@
 <template>
-  <div class="settings container p-5">
+  <div class="settings container p-5 dark:bg-slate-900">
     <el-tabs v-model="active" type="border-card">
       <el-tab-pane label="支付宝" name="alipay">
         <template #label>
-          <div class="d-flex align-items-center text-blue-600">
+          <div class="d-flex align-items-center text-violet-600 dark:text-violet-400">
             <i class="iconfont icon-alipay"></i>
             <span class="ms-2">支付宝</span>
           </div>
@@ -46,7 +46,7 @@
 
       <el-tab-pane label="微信支付" name="wxpay">
         <template #label>
-          <div class="d-flex align-items-center text-green-600">
+          <div class="d-flex align-items-center text-green-600 dark:text-green-400">
             <i class="iconfont icon-wechat-pay"></i>
             <span class="ms-2">微信支付</span>
           </div>
@@ -84,7 +84,7 @@
 
       <el-tab-pane label="易支付" name="epay">
         <template #label>
-          <div class="d-flex align-items-center text-purple-600">
+          <div class="d-flex align-items-center text-violet-600 dark:text-violet-400">
             <i class="iconfont icon-reward"></i>
             <span class="ms-2">易支付</span>
           </div>
@@ -181,6 +181,7 @@ const save = () => {
 .settings {
   a {
     color: #409eff;
+    @apply dark:text-violet-400;
     &:hover {
       text-decoration: underline;
     }

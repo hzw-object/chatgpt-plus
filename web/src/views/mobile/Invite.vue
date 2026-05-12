@@ -1,5 +1,5 @@
 <template>
-  <div class="invite-page">
+  <div class="invite-page dark:bg-slate-900">
     <div class="invite-content">
       <!-- 邀请头图 -->
       <div class="invite-header">
@@ -16,21 +16,21 @@
       <div class="stats-section">
         <van-row :gutter="12">
           <van-col :span="8">
-            <div class="stat-card">
+            <div class="stat-card dark:bg-slate-800 dark:text-white">
               <div class="stat-number">{{ userStats.inviteCount }}</div>
-              <div class="stat-label">累计邀请</div>
+              <div class="stat-label dark:text-slate-300">累计邀请</div>
             </div>
           </van-col>
           <van-col :span="8">
-            <div class="stat-card">
+            <div class="stat-card dark:bg-slate-800 dark:text-white">
               <div class="stat-number">{{ userStats.rewardTotal }}</div>
-              <div class="stat-label">获得奖励</div>
+              <div class="stat-label dark:text-slate-300">获得奖励</div>
             </div>
           </van-col>
           <van-col :span="8">
-            <div class="stat-card">
+            <div class="stat-card dark:bg-slate-800 dark:text-white">
               <div class="stat-number">{{ userStats.todayInvite }}</div>
-              <div class="stat-label">今日邀请</div>
+              <div class="stat-label dark:text-slate-300">今日邀请</div>
             </div>
           </van-col>
         </van-row>
@@ -38,19 +38,19 @@
 
       <!-- 奖励规则 -->
       <div class="rules-section">
-        <h3 class="section-title">奖励规则</h3>
+        <h3 class="section-title dark:text-white">奖励规则</h3>
         <div class="rules-list">
-          <div class="rule-item" v-for="rule in rewardRules" :key="rule.id">
+          <div class="rule-item dark:bg-slate-800" v-for="rule in rewardRules" :key="rule.id">
             <div class="rule-icon">
               <i class="iconfont" :class="rule.icon" :style="{ color: rule.color }"></i>
             </div>
             <div class="rule-content">
-              <div class="rule-title">{{ rule.title }}</div>
-              <div class="rule-desc">{{ rule.desc }}</div>
+              <div class="rule-title dark:text-white">{{ rule.title }}</div>
+              <div class="rule-desc dark:text-slate-400">{{ rule.desc }}</div>
             </div>
             <div class="rule-reward">
-              <span class="reward-value">+{{ rule.reward }}</span>
-              <span class="reward-unit">算力</span>
+              <span class="reward-value dark:text-emerald-400">+{{ rule.reward }}</span>
+              <span class="reward-unit dark:text-slate-400">算力</span>
             </div>
           </div>
         </div>
@@ -58,9 +58,9 @@
 
       <!-- 邀请码 -->
       <div class="invite-code-section">
-        <div class="code-card">
+        <div class="code-card dark:bg-slate-800">
           <div class="code-header">
-            <span class="code-label">我的邀请码</span>
+            <span class="code-label dark:text-white">我的邀请码</span>
             <van-button
               size="small"
               type="primary"
@@ -71,7 +71,7 @@
               复制
             </van-button>
           </div>
-          <div class="code-value">{{ inviteCode }}</div>
+          <div class="code-value dark:bg-slate-700 dark:text-violet-300">{{ inviteCode }}</div>
           <div class="code-link">
             <van-field v-model="inviteLink" readonly placeholder="邀请链接">
               <template #button>
@@ -92,12 +92,12 @@
       <!-- 邀请记录 -->
       <div class="invite-records">
         <div class="records-header">
-          <h3 class="section-title">邀请记录</h3>
+          <h3 class="section-title dark:text-white">邀请记录</h3>
         </div>
 
         <div class="records-list">
           <div v-if="inviteRecords.length > 0">
-            <div v-for="record in inviteRecords" :key="record.id" class="record-item">
+            <div v-for="record in inviteRecords" :key="record.id" class="record-item dark:bg-slate-800">
               <div class="record-avatar">
                 <van-image
                   :src="record.avatar || '/images/avatar/default.jpg'"
@@ -108,8 +108,8 @@
                 />
               </div>
               <div class="record-info">
-                <div class="record-name">{{ record.username }}</div>
-                <div class="record-time">{{ formatTime(record.created_at) }}</div>
+                <div class="record-name dark:text-white">{{ record.username }}</div>
+                <div class="record-time dark:text-slate-400">{{ formatTime(record.created_at) }}</div>
               </div>
               <div class="record-status">
                 <van-tag type="success">已获得奖励</van-tag>
@@ -276,6 +276,10 @@ const onAvatarError = (e) => {
       overflow: hidden;
       background: linear-gradient(135deg, var(--van-primary-color), #8b5cf6);
 
+      &.dark {
+        background: linear-gradient(135deg, #1e293b, #4c1d95);
+      }
+
       .header-bg {
         position: absolute;
         top: 0;
@@ -404,6 +408,10 @@ const onAvatarError = (e) => {
             font-size: 16px;
             font-weight: 600;
             color: #07c160;
+
+            .dark & {
+              color: #34d399;
+            }
           }
 
           .reward-unit {
@@ -488,19 +496,6 @@ const onAvatarError = (e) => {
           }
         }
       }
-    }
-  }
-}
-
-// 深色主题优化
-:deep(.van-theme-dark) {
-  .invite-page {
-    .stat-card,
-    .rule-item,
-    .method-item,
-    .code-card,
-    .record-item {
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
     }
   }
 }

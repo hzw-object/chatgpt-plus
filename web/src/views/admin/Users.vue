@@ -1,5 +1,5 @@
 <template>
-  <div class="container user-list" v-loading="loading">
+  <div class="container user-list bg-white dark:bg-slate-900" v-loading="loading">
     <div class="handle-box">
       <el-input v-model="query.username" placeholder="账号" class="handle-input mr10"></el-input>
       <el-input v-model="query.mobile" placeholder="手机" class="handle-input mr10"></el-input>
@@ -27,7 +27,7 @@
               <el-icon
                 class="copy-icon"
                 @click="copyUsername(scope.row.username)"
-                style="margin-left: 8px; cursor: pointer; color: #909399"
+                style="margin-left: 8px; cursor: pointer; color: #909399; dark:hover:text-blue-400"
               >
                 <DocumentCopy />
               </el-icon>
@@ -66,7 +66,7 @@
           <template #default="scope">
             <el-dropdown>
               <button
-                class="px-2 py-1 bg-purple-200 hover:bg-purple-300 rounded text-purple-800 text-sm"
+                class="px-2 py-1 bg-violet-200 hover:bg-violet-300 rounded text-violet-800 text-sm"
               >
                 <i class="iconfont icon-more-horizontal"></i>
               </button>
@@ -481,6 +481,10 @@ const copyUsername = (username) => {
     &:hover {
       color: #409eff !important;
       transform: scale(1.1);
+    }
+
+    .dark &:hover {
+      color: #60a5fa !important;
     }
   }
 

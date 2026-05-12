@@ -1,6 +1,6 @@
 <template>
-  <div class="container list" v-loading="loading">
-    <div class="handle-box">
+  <div class="container list dark:bg-slate-900" v-loading="loading">
+    <div class="handle-box dark:bg-slate-800">
       <el-select v-model="query.type" placeholder="类型" class="handle-input">
         <el-option
           v-for="item in types"
@@ -295,6 +295,8 @@ const changePreset = (row) => {
 .list {
   .handle-box {
     margin-bottom: 20px;
+    background-color: transparent;
+    @apply dark:bg-slate-800;
     .handle-input {
       max-width: 150px;
       margin-right: 10px;
@@ -321,6 +323,7 @@ const changePreset = (row) => {
   .el-form-item__content {
     .info {
       color: #999999;
+      @apply dark:text-slate-400;
     }
     .el-icon {
       padding-left: 10px;

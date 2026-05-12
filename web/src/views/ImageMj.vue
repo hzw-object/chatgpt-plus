@@ -83,7 +83,7 @@
               <el-form-item label="重复平铺">
                 <template #default>
                   <div class="form-item-inner">
-                    <el-switch v-model="params.tile" inactive-color="#464649" />
+                    <el-switch v-model="params.tile" inactive-color="#464649" class="dark:!inactive-color=#3f3f46" />
                     <el-tooltip
                       content="重复：--tile，参数释义：生成可用作重复平铺的图像，以创建无缝图案。"
                       raw-content
@@ -102,7 +102,7 @@
               <el-form-item label="原始模式">
                 <template #default>
                   <div class="form-item-inner">
-                    <el-switch v-model="params.raw" inactive-color="#464649" />
+                    <el-switch v-model="params.raw" inactive-color="#464649" class="dark:!inactive-color=#3f3f46" />
                     <el-tooltip
                       content="启用新的RAW模式，呈现的人物写实感更加逼真，人物细节、光源、流畅度也更加接近原始作品。<br/> 同时也意味着您需要添加更长的提示。"
                       raw-content
@@ -204,7 +204,7 @@
                             </el-icon>
                           </el-tooltip>
                           <div
-                            class="flex-row justify-start items-center m-2 p-3 bg-gray-100 rounded-md text-gray-500 text-sm"
+                            class="flex-row justify-start items-center m-2 p-3 bg-gray-100 dark:bg-slate-800 rounded-md text-gray-500 dark:text-gray-400 text-sm"
                           >
                             <span
                               >如需自定义比例，在绘画指令最后加一个空格然后加上指令(宽高比) --ar w:h
@@ -467,6 +467,7 @@
                         placeholder="请输入图片URL或者上传图片"
                         style="
                           --el-input-focus-border-color: #b0a0f8;
+                          --el-input-focus-border-color-dark: #a78bfa;
                           max-width: 500px;
                           width: 100%;
                         "
@@ -495,6 +496,7 @@
                         placeholder="请输入图片URL或者上传图片"
                         style="
                           --el-input-focus-border-color: #b0a0f8;
+                          --el-input-focus-border-color-dark: #a78bfa;
                           max-width: 500px;
                           width: 100%;
                         "
@@ -614,7 +616,7 @@
 
               <div class="submit-btn">
                 <button
-                  class="px-10 py-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-xl disabled:from-gray-400 disabled:to-gray-400 disabled:cursor-not-allowed hover:from-blue-600 hover:to-purple-700 transition-all duration-200 flex items-center justify-center space-x-2 text-base"
+                  class="px-10 py-3 bg-gradient-to-r from-violet-500 to-violet-700 text-white rounded-xl disabled:from-slate-400 disabled:to-slate-400 disabled:cursor-not-allowed hover:from-violet-600 hover:to-violet-800 transition-all duration-200 flex items-center justify-center space-x-2 text-base"
                   @click="generate"
                   type="button"
                 >
@@ -656,7 +658,7 @@
                   >
                     <template #default="{ item, url }">
                       <div
-                        class="bg-gray-900 rounded-lg shadow-md overflow-hidden transition-all duration-300 ease-linear hover:shadow-md hover:shadow-purple-800 group"
+                        class="bg-gray-900 dark:bg-slate-800 rounded-lg shadow-md overflow-hidden transition-all duration-300 ease-linear hover:shadow-md hover:shadow-violet-800 group"
                       >
                         <div class="overflow-hidden rounded-lg">
                           <LazyImg
@@ -692,14 +694,14 @@
                           </el-image>
                         </div>
                         <div
-                          class="px-4 pt-2 pb-4 border-t border-t-gray-800"
+                          class="px-4 pt-2 pb-4 border-t border-t-gray-800 dark:border-t-slate-700"
                           v-if="item.progress === 100"
                         >
                           <div class="opt" v-if="item['can_opt']">
                             <el-row :gutter="8" class="mb-3">
                               <el-col :span="6" v-for="i in 4" :key="'u' + i">
                                 <button
-                                  class="w-full h-6 rounded bg-gray-500 text-xs text-white shadow-md transition-all duration-300 hover:bg-gray-600"
+                                  class="w-full h-6 rounded bg-gray-500 dark:bg-slate-600 text-xs text-white shadow-md transition-all duration-300 hover:bg-gray-600 dark:hover:bg-slate-500"
                                   @click="upscale(i, item)"
                                 >
                                   U{{ i }}
@@ -709,7 +711,7 @@
                             <el-row :gutter="8" class="mb-3">
                               <el-col :span="6" v-for="i in 4" :key="'v' + i">
                                 <button
-                                  class="w-full h-6 rounded bg-gray-500 text-xs text-white shadow-md transition-all duration-300 hover:bg-gray-600"
+                                  class="w-full h-6 rounded bg-gray-500 dark:bg-slate-600 text-xs text-white shadow-md transition-all duration-300 hover:bg-gray-600 dark:hover:bg-slate-500"
                                   @click="variation(i, item)"
                                 >
                                   V{{ i }}
@@ -719,7 +721,7 @@
                           </div>
 
                           <div
-                            class="pt-3 flex justify-center items-center border-t border-t-gray-600 border-opacity-50"
+                            class="pt-3 flex justify-center items-center border-t border-t-gray-600 dark:border-t-slate-500 border-opacity-50"
                           >
                             <div class="flex">
                               <el-tooltip content="取消分享" placement="top" v-if="item.publish">
@@ -781,14 +783,14 @@
                     />
                     <div v-else>
                       <button
-                        class="px-5 py-2 rounded-full bg-purple-700 text-md text-white cursor-pointer hover:bg-purple-800 transition-all duration-300"
+                        class="px-5 py-2 rounded-full bg-violet-700 dark:bg-violet-600 text-md text-white cursor-pointer hover:bg-violet-800 dark:hover:bg-violet-500 transition-all duration-300"
                         @click="fetchFinishJobs"
                         v-if="!isOver"
                       >
                         加载更多
                       </button>
                       <div class="no-more-data" v-else>
-                        <span class="text-gray-500 mr-2">没有更多数据了</span>
+                        <span class="text-gray-500 dark:text-slate-400 mr-2">没有更多数据了</span>
                         <i class="iconfont icon-face"></i>
                       </div>
                     </div>

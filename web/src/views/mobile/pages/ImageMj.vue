@@ -196,7 +196,7 @@
           @click="generate"
           :disabled="loading"
           type="button"
-          class="w-full py-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white font-semibold rounded-xl disabled:from-gray-400 disabled:to-gray-400 disabled:cursor-not-allowed hover:from-blue-600 hover:to-purple-700 transition-all duration-200 flex items-center justify-center space-x-2"
+          class="w-full py-3 bg-gradient-to-r from-violet-500 to-violet-700 text-white font-semibold rounded-xl disabled:from-slate-400 disabled:to-slate-400 disabled:cursor-not-allowed hover:from-violet-600 hover:to-violet-800 transition-all duration-200 flex items-center justify-center space-x-2"
         >
           <i v-if="loading" class="iconfont icon-loading animate-spin"></i>
           <i v-else class="iconfont icon-chuangzuo"></i>
@@ -276,8 +276,8 @@
                   <van-loading type="spinner" size="20" />
                 </template>
                 <template v-slot:error>
-                  <span style="margin-bottom: 20px">正在下载图片</span>
-                  <van-loading type="circular" color="#1989fa" size="40" />
+                  <span style="margin-bottom: 20px" class="dark:text-gray-400">正在下载图片</span>
+                  <van-loading type="circular" color="#1989fa" size="40" class="dark:!text-blue-400" />
                 </template>
               </van-image>
 

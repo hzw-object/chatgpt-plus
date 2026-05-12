@@ -1,5 +1,5 @@
 <template>
-  <div class="settings container p-5">
+  <div class="settings container p-5 dark:bg-slate-900">
     <el-tabs v-model="activeTab" type="border-card">
       <el-tab-pane label="阿里云短信" name="aliyun">
         <template #label>
@@ -131,13 +131,13 @@ const saveSmsConfig = async () => {
 <style lang="scss">
 .settings {
   a {
-    color: #409eff;
+    @apply text-violet-500 dark:text-violet-400;
     &:hover {
       text-decoration: underline;
     }
   }
   .el-form-item__label {
-    font-weight: 700;
+    @apply font-bold dark:text-slate-200;
   }
 }
 </style>

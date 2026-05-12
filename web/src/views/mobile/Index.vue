@@ -56,7 +56,7 @@
           class="feature-item"
         >
           <template #icon>
-            <div class="feature-icon" :style="{ backgroundColor: feature.color }">
+            <div class="feature-icon" :class="getFeatureIconClass(feature.color)">
               <i class="iconfont" :class="feature.icon"></i>
             </div>
           </template>
@@ -283,6 +283,35 @@ const useRole = (roleId) => {
   }
   router.push(`/mobile/chat/session?role_id=${roleId}`)
 }
+
+// Map colors to Tailwind dark mode icon background classes
+const colorToDarkBg = {
+  '#8B5CF6': 'dark:bg-violet-600 dark:shadow-violet-500/20',
+  '#06B6D4': 'dark:bg-cyan-600 dark:shadow-cyan-500/20',
+  '#F59E0B': 'dark:bg-amber-500 dark:shadow-amber-500/20',
+  '#EF4444': 'dark:bg-red-600 dark:shadow-red-500/20',
+  '#10B981': 'dark:bg-emerald-600 dark:shadow-emerald-500/20',
+  '#F97316': 'dark:bg-orange-600 dark:shadow-orange-500/20',
+  '#3B82F6': 'dark:bg-blue-600 dark:shadow-blue-500/20',
+  '#EC4899': 'dark:bg-pink-600 dark:shadow-pink-500/20',
+}
+
+const colorToLightBg = {
+  '#8B5CF6': 'bg-violet-500 shadow-violet-500/20',
+  '#06B6D4': 'bg-cyan-500 shadow-cyan-500/20',
+  '#F59E0B': 'bg-amber-500 shadow-amber-500/20',
+  '#EF4444': 'bg-red-500 shadow-red-500/20',
+  '#10B981': 'bg-emerald-500 shadow-emerald-500/20',
+  '#F97316': 'bg-orange-500 shadow-orange-500/20',
+  '#3B82F6': 'bg-blue-500 shadow-blue-500/20',
+  '#EC4899': 'bg-pink-500 shadow-pink-500/20',
+}
+
+const getFeatureIconClass = (color) => {
+  const lightClass = colorToLightBg[color] || 'bg-violet-500'
+  const darkClass = colorToDarkBg[color] || 'dark:bg-violet-600'
+  return `${lightClass} ${darkClass}`
+}
 </script>
 
 <style scoped lang="scss">
@@ -291,6 +320,10 @@ const useRole = (roleId) => {
   background: linear-gradient(135deg, var(--van-background), var(--van-background-2));
   min-height: 100vh;
   padding: 0;
+
+  @media (prefers-color-scheme: dark) {
+    background: linear-gradient(135deg, #121212, #1a1a2e);
+  }
   .header {
     padding: 20px 0 16px;
     position: sticky;
@@ -316,6 +349,13 @@ const useRole = (roleId) => {
           -webkit-background-clip: text;
           -webkit-text-fill-color: transparent;
           background-clip: text;
+
+          @media (prefers-color-scheme: dark) {
+            background: linear-gradient(135deg, #a78bfa, #c4b5fd);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+          }
         }
 
         .subtitle {
@@ -355,6 +395,10 @@ const useRole = (roleId) => {
         .action-desc {
           color: white;
         }
+
+        @media (prefers-color-scheme: dark) {
+          background: linear-gradient(135deg, #7c3aed, #6d28d9);
+        }
       }
 
       &.secondary {
@@ -365,6 +409,10 @@ const useRole = (roleId) => {
         .action-title,
         .action-desc {
           color: white;
+        }
+
+        @media (prefers-color-scheme: dark) {
+          background: linear-gradient(135deg, #0891b2, #059669);
         }
       }
 
@@ -434,6 +482,7 @@ const useRole = (roleId) => {
         justify-content: center;
         margin: 0 auto 8px;
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
 
         i {
           font-size: 24px;

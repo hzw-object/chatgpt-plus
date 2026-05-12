@@ -9,8 +9,6 @@ import '@/assets/css/tailwind.css'
 import '@/assets/iconfont/iconfont.css'
 import { useThemeStore } from '@/store/theme'
 import 'animate.css/animate.min.css'
-import ElementPlus from 'element-plus'
-import 'element-plus/dist/index.css'
 import { createPinia } from 'pinia'
 import 'vant/lib/index.css'
 import { createApp } from 'vue'
@@ -142,4 +140,4 @@ app.use(ActionSheet)
 app.use(PullRefresh)
 app.use(Calendar)
 app.use(Toast)
-app.use(router).use(ElementPlus).mount('#app')
+app.use(router).mount('#app')

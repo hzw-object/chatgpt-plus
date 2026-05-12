@@ -1,6 +1,6 @@
 <template>
-  <div class="container role-list" v-loading="loading">
-    <div class="handle-box">
+  <div class="container role-list dark:bg-slate-900" v-loading="loading">
+    <div class="handle-box dark:bg-slate-800 dark:text-slate-200 p-4 rounded">
       <el-button type="primary" :icon="Plus" @click="addRole">新增</el-button>
     </div>
     <el-row>
@@ -158,10 +158,9 @@
                         <el-row class="text-line">
                           <el-text type="info" size="small">使用 AI 生成 System 预设指令</el-text>
                           <el-button
-                            class="generate-btn"
+                            class="generate-btn dark:bg-indigo-600 dark:hover:bg-indigo-700 dark:text-white"
                             size="small"
                             @click="generatePrompt(scope.row)"
-                            color="#5865f2"
                             :disabled="isGenerating"
                           >
                             <i class="iconfont icon-chuangzuo"></i>
@@ -485,5 +484,19 @@ const generatePrompt = (row) => {
     margin-right: 5px;
     font-size: 14px;
   }
+}
+
+.dark {
+  .role-list {
+    background-color: var(--el-bg-color-page);
+  }
+}
+
+:deep(.el-table) {
+  --el-fill-color-blank: var(--el-bg-color);
+}
+
+:deep(.el-table th.el-table__cell) {
+  --el-table-header-bg-color: var(--el-fill-color-light);
 }
 </style>

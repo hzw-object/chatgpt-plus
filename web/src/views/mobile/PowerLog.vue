@@ -44,13 +44,13 @@
             finished-text="没有更多了"
             @load="onLoad"
           >
-            <div v-for="item in logList" :key="item.id" class="log-item">
+            <div v-for="item in logList" :key="item.id" class="log-item dark:bg-slate-800">
               <div class="log-header">
                 <div class="log-icon" :style="{ backgroundColor: getTypeColor(item.type) }">
                   <i class="iconfont" :class="getTypeIcon(item.type)"></i>
                 </div>
                 <div class="log-info">
-                  <div class="log-title">
+                  <div class="log-title dark:text-gray-200">
                     {{ item.model || getTypeTitle(item.type) }}
                     <van-tag type="primary" class="ml-2">{{ item.type_str }}</van-tag>
                   </div>
@@ -264,7 +264,7 @@ const formatTime = (timestamp) => {
   .power-content {
     .stats-overview {
       padding: 16px;
-      background: linear-gradient(135deg, var(--van-primary-color), #8b5cf6);
+      @apply bg-gradient-to-br from-violet-500 to-violet-700 dark:from-violet-600 dark:to-violet-800;
 
       .stats-card {
         background: rgba(255, 255, 255, 0.1);
@@ -351,7 +351,7 @@ const formatTime = (timestamp) => {
 
             .log-time {
               font-size: 12px;
-              color: var(--van-gray-6);
+              @apply text-gray-500 dark:text-gray-400;
             }
           }
 
@@ -362,15 +362,17 @@ const formatTime = (timestamp) => {
               font-size: 16px;
               font-weight: 600;
               color: #ee0a24;
+              @apply dark:text-red-500;
 
               &.income {
                 color: #07c160;
+                @apply dark:text-green-500;
               }
             }
 
             .cost-unit {
               font-size: 12px;
-              color: var(--van-gray-6);
+              @apply text-gray-500 dark:text-gray-400;
               margin-left: 2px;
             }
           }
@@ -399,7 +401,7 @@ const formatTime = (timestamp) => {
 
           .balance-value {
             font-weight: 500;
-            color: var(--van-text-color);
+            @apply text-gray-800 dark:text-gray-200;
           }
         }
       }

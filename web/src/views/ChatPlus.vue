@@ -1,260 +1,235 @@
 <template>
-  <div class="chat-page">
-    <el-container>
-      <el-aside v-show="store.chatListExtend">
-        <div class="flex w-full justify-center pt-3 pb-3">
-          <img :src="logo" style="max-height: 40px" :alt="title" v-if="logo !== ''" />
-          <h2 v-else>{{ title }}</h2>
-        </div>
+  <div class="chat-page flex h-screen">
+    <!-- Aside - Chat List -->
+    <aside
+      v-show="store.chatListExtend"
+      class="w-72 flex-shrink-0 bg-white dark:bg-slate-800 border-r border-slate-200 dark:border-slate-700 flex flex-col"
+    >
+      <div class="flex w-full justify-center pt-3 pb-3">
+        <img :src="logo" style="max-height: 40px" :alt="title" v-if="logo !== ''" />
+        <h2 v-else>{{ title }}</h2>
+      </div>
 
-        <div class="chat-list-container">
-          <el-button @click="_newChat" type="primary" class="newChat">
-            <i class="iconfont icon-new-chat mr-1"></i>
-            新建对话
-          </el-button>
+      <div class="chat-list-container flex-1 flex flex-col overflow-hidden">
+        <button @click="_newChat" class="new-chat-btn mx-3 mb-3 px-4 py-2 bg-violet-600 hover:bg-violet-700 text-white rounded-lg flex items-center justify-center gap-2">
+          <i class="iconfont icon-new-chat"></i>
+          新建对话
+        </button>
 
-          <div class="search-box">
-            <el-input
+        <div class="search-box px-3 mb-3">
+          <div class="relative">
+            <i class="iconfont icon-search absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
+            <input
               v-model="chatName"
               placeholder="搜索会话"
               @keyup="searchChat($event)"
-              style=""
-              class="search-input"
+              class="search-input w-full pl-10 pr-4 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100"
+            />
+          </div>
+        </div>
+
+        <div class="flex-1 overflow-y-auto px-3" :style="{ height: chatListHeight + 'px' }">
+          <div class="content space-y-2">
+            <div
+              v-for="chat in chatList"
+              :key="chat.chat_id"
+              :class="chat.chat_id === chatId ? 'chat-list-item active' : 'chat-list-item'"
+              @click="loadChat(chat)"
+              class="flex items-center gap-3 p-3 rounded-lg cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors"
             >
-              <template #prefix>
-                <el-icon class="el-input__icon">
-                  <Search />
-                </el-icon>
-              </template>
-            </el-input>
-          </div>
-          <el-scrollbar :height="chatListHeight">
-            <div class="content">
-              <el-row v-for="chat in chatList" :key="chat.chat_id">
+              <img :src="chat.icon" class="avatar w-10 h-10 rounded-full object-cover" />
+              <div class="flex-1 min-w-0">
+                <input
+                  v-if="chat.edit"
+                  v-model="tmpChatTitle"
+                  @keydown="titleKeydown($event, chat)"
+                  :id="'chat-' + chat.chat_id"
+                  @blur="editConfirm(chat)"
+                  @click.stop="stopPropagation($event)"
+                  placeholder="请输入标题"
+                  class="w-full px-2 py-1 text-sm border border-slate-300 rounded"
+                />
+                <span v-else class="chat-title block truncate">{{ chat.title }}</span>
+              </div>
+              <div class="chat-opt relative" @click.stop>
+                <button @click="toggleDropdown(chat)" class="p-1 hover:bg-slate-200 rounded">
+                  <i class="iconfont icon-more text-lg"></i>
+                </button>
                 <div
-                  :class="chat.chat_id === chatId ? 'chat-list-item active' : 'chat-list-item'"
-                  @click="loadChat(chat)"
+                  v-if="activeDropdown === chat.chat_id"
+                  class="absolute right-0 top-full mt-1 bg-white dark:bg-slate-700 rounded-lg shadow-lg border border-slate-200 dark:border-slate-600 z-50 py-1 min-w-[100px]"
                 >
-                  <el-image :src="chat.icon" class="avatar" />
-                  <span class="chat-title-input" v-if="chat.edit">
-                    <el-input
-                      v-model="tmpChatTitle"
-                      size="small"
-                      @keydown="titleKeydown($event, chat)"
-                      :id="'chat-' + chat.chat_id"
-                      @blur="editConfirm(chat)"
-                      @click="stopPropagation($event)"
-                      placeholder="请输入标题"
-                    />
-                  </span>
-                  <span v-else class="chat-title">{{ chat.title }}</span>
-
-                  <span class="chat-opt">
-                    <el-dropdown trigger="click">
-                      <span class="el-dropdown-link" @click="stopPropagation($event)">
-                        <el-icon><More /></el-icon>
-                      </span>
-                      <template #dropdown>
-                        <el-dropdown-menu>
-                          <el-dropdown-item :icon="Edit" @click="editChatTitle(chat)"
-                            >重命名</el-dropdown-item
-                          >
-                          <el-dropdown-item
-                            :icon="Delete"
-                            style="
-                              --el-text-color-regular: var(--el-color-danger);
-                              --el-dropdown-menuItem-hover-fill: #f8e1de;
-                              --el-dropdown-menuItem-hover-color: var(--el-color-danger);
-                            "
-                            @click="removeChat(chat)"
-                            >删除</el-dropdown-item
-                          >
-                          <el-dropdown-item :icon="Share" @click="shareChat(chat)"
-                            >分享</el-dropdown-item
-                          >
-                        </el-dropdown-menu>
-                      </template>
-                    </el-dropdown>
-                  </span>
+                  <button @click="editChatTitle(chat)" class="w-full px-4 py-2 text-left hover:bg-slate-100 dark:hover:bg-slate-600 flex items-center gap-2">
+                    <i class="iconfont icon-edit"></i> 重命名
+                  </button>
+                  <button @click="removeChat(chat)" class="w-full px-4 py-2 text-left hover:bg-slate-100 dark:hover:bg-slate-600 text-red-500 flex items-center gap-2">
+                    <i class="iconfont icon-delete"></i> 删除
+                  </button>
+                  <button @click="shareChat(chat)" class="w-full px-4 py-2 text-left hover:bg-slate-100 dark:hover:bg-slate-600 flex items-center gap-2">
+                    <i class="iconfont icon-share-bold"></i> 分享
+                  </button>
                 </div>
-              </el-row>
+              </div>
             </div>
-          </el-scrollbar>
-        </div>
-
-        <div class="tool-box">
-          <el-button type="primary" size="small" @click="clearAllChats">
-            <i class="iconfont icon-clear"></i> 清除所有对话
-          </el-button>
-        </div>
-      </el-aside>
-
-      <el-main
-        v-loading="loading"
-        element-loading-background="rgba(122, 122, 122, 0.3)"
-        class="relative"
-      >
-        <div class="absolute top-2 left-2 cursor-pointer">
-          <div @click="store.setChatListExtend(!store.chatListExtend)">
-            <el-tooltip content="隐藏对话列表" placement="right" v-if="store.chatListExtend">
-              <i class="iconfont icon-colspan text-xl"></i>
-            </el-tooltip>
-            <el-tooltip content="展开对话列表" placement="right" v-else>
-              <i class="iconfont icon-expand text-xl"></i>
-            </el-tooltip>
           </div>
         </div>
+      </div>
+
+      <div class="tool-box p-3 border-t border-slate-200 dark:border-slate-700">
+        <button @click="clearAllChats" class="w-full px-4 py-2 bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 rounded-lg flex items-center justify-center gap-2">
+          <i class="iconfont icon-clear"></i> 清除所有对话
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 relative overflow-hidden">
+      <div v-if="loading" class="absolute inset-0 bg-slate-500/30 flex items-center justify-center z-10">
+        <div class="w-10 h-10 border-4 border-violet-600 border-t-transparent rounded-full animate-spin"></div>
+      </div>
+
+      <div class="absolute top-2 left-2 cursor-pointer z-20">
+        <div @click="store.setChatListExtend(!store.chatListExtend)">
+          <span v-if="store.chatListExtend" :title="'隐藏对话列表'" class="inline-flex items-center justify-center w-8 h-8 rounded-full hover:bg-slate-100 dark:hover:bg-slate-700">
+            <i class="iconfont icon-colspan text-xl"></i>
+          </span>
+          <span v-else :title="'展开对话列表'" class="inline-flex items-center justify-center w-8 h-8 rounded-full hover:bg-slate-100 dark:hover:bg-slate-700">
+            <i class="iconfont icon-expand text-xl"></i>
+          </span>
+        </div>
+      </div>
 
         <div class="chat-container">
-          <div class="chat-config">
-            <el-select
+          <div class="chat-config flex items-center gap-3">
+            <!-- Role Select -->
+            <select
               v-model="roleId"
-              filterable
-              placeholder="应用"
               @change="_newChat"
-              class="role-select"
-              style="width: 150px"
+              class="w-40 px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100"
             >
-              <el-option v-for="item in roles" :key="item.id" :label="item.name" :value="item.id">
-                <div class="role-option">
-                  <el-image :src="item.icon"></el-image>
-                  <span>{{ item.name }}</span>
-                </div>
-              </el-option>
-            </el-select>
+              <option v-for="item in roles" :key="item.id" :value="item.id">
+                {{ item.name }}
+              </option>
+            </select>
 
-            <el-popover
-              placement="bottom"
-              :width="800"
-              trigger="click"
-              popper-class="model-selector-popover"
-              ref="modelSelectorRef"
-            >
-              <template #reference>
-                <div class="model-selector-trigger">
-                  <el-button
-                    type="primary"
-                    :disabled="disableModel"
-                    class="adaptive-width-button"
-                    size="small"
-                    plain
-                  >
-                    <div class="selected-model-display">
-                      <span class="model-name-text">{{ getSelectedModelName() }}</span>
-                      <el-tag
-                        v-if="getSelectedModel()"
-                        size="small"
-                        type="info"
-                        style="margin-left: 8px; flex-shrink: 0"
-                      >
-                        {{ getSelectedModel() && getSelectedModel().power }}算力
-                      </el-tag>
-                    </div>
-                  </el-button>
-                </div>
-              </template>
+            <!-- Model Selector Popover -->
+            <div class="relative">
+              <button
+                @click="showModelSelector = !showModelSelector"
+                :disabled="disableModel"
+                class="min-w-[180px] max-w-[350px] px-4 py-2 border border-violet-300 dark:border-violet-700 rounded-lg bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 hover:bg-violet-50 dark:hover:bg-violet-900/20 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+              >
+                <span class="truncate flex-1">{{ getSelectedModelName() }}</span>
+                <span
+                  v-if="getSelectedModel()"
+                  class="px-2 py-0.5 text-xs bg-slate-100 dark:bg-slate-700 rounded"
+                >
+                  {{ getSelectedModel().power }}算力
+                </span>
+                <i class="iconfont icon-arrow-down text-sm"></i>
+              </button>
 
-              <div class="model-selector-container">
-                <div class="model-search">
-                  <el-input
-                    v-model="modelSearchKeyword"
-                    placeholder="搜索模型"
-                    prefix-icon="el-icon-search"
-                    clearable
-                    style="width: 200px"
-                  />
-                  <el-button
-                    :type="showFreeModelsOnly ? 'primary' : 'default'"
-                    size="default"
+              <!-- Model Selector Dropdown -->
+              <div
+                v-if="showModelSelector"
+                class="absolute left-1/2 -translate-x-1/2 top-full mt-2 bg-white dark:bg-slate-800 rounded-xl shadow-2xl border border-slate-200 dark:border-slate-700 z-50 p-4 w-[820px] max-w-[90vw]"
+              >
+                <div class="model-search flex items-center gap-3 mb-4">
+                  <div class="relative flex-1">
+                    <i class="iconfont icon-search absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                    <input
+                      v-model="modelSearchKeyword"
+                      placeholder="搜索模型"
+                      class="w-full pl-10 pr-4 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100"
+                    />
+                  </div>
+                  <button
                     @click="toggleFreeModels"
-                    style="margin-left: 10px"
+                    :class="showFreeModelsOnly ? 'bg-violet-600 text-white' : 'bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300'"
+                    class="px-4 py-2 rounded-lg flex items-center gap-2 transition-colors"
                   >
-                    <i class="iconfont icon-free" style="margin-right: 4px"></i>
+                    <i class="iconfont icon-free"></i>
                     免费模型
-                  </el-button>
+                  </button>
                 </div>
 
-                <div class="category-tabs">
-                  <div
-                    class="category-tab"
-                    :class="{ active: activeCategory === '' }"
-                    @click="activeCategory = ''"
-                  >
-                    全部
-                  </div>
-
-                  <div
-                    v-for="category in modelCategories"
+                <div class="category-tabs flex flex-wrap gap-2 border-b border-slate-200 dark:border-slate-700 pb-3 mb-4">
+                  <button
+                    v-for="category in ['', ...modelCategories]"
                     :key="category"
-                    class="category-tab"
-                    :class="{ active: activeCategory === category }"
                     @click="activeCategory = category"
+                    :class="activeCategory === category ? 'border-b-2 border-violet-600 text-violet-600' : 'text-slate-500 hover:text-violet-600'"
+                    class="px-3 py-1 text-sm transition-colors"
                   >
-                    {{ category }}
-                  </div>
-                  <div
+                    {{ category || '全部' }}
+                  </button>
+                  <button
                     v-if="activeCategory && modelCategories.length > 0"
-                    class="category-tab reset-filter"
                     @click="activeCategory = ''"
+                    class="ml-auto px-3 py-1 text-sm text-red-500 hover:text-red-600 flex items-center gap-1"
                   >
-                    <i class="el-icon-close"></i> 清除筛选
-                  </div>
+                    <i class="iconfont icon-close"></i> 清除筛选
+                  </button>
                 </div>
 
-                <div v-if="displayedModels.length === 0" class="no-results">
-                  <el-empty description="没有找到匹配的模型" />
+                <div v-if="displayedModels.length === 0" class="py-12 text-center text-slate-400">
+                  <i class="iconfont icon-empty text-5xl mb-3"></i>
+                  <p>没有找到匹配的模型</p>
                 </div>
 
-                <div v-else class="models-grid">
+                <div v-else class="models-grid grid grid-cols-3 gap-4 max-h-[450px] overflow-y-auto">
                   <div
                     v-for="model in displayedModels"
                     :key="model.id"
-                    class="model-card"
-                    :class="{ selected: model.id === modelID }"
                     @click="selectModel(model)"
+                    :class="model.id === modelID ? 'border-violet-500 bg-violet-50 dark:bg-violet-900/20' : 'border-slate-200 dark:border-slate-600 hover:border-violet-400'"
+                    class="model-card border rounded-lg p-4 cursor-pointer transition-all hover:-translate-y-0.5 hover:shadow-md"
                   >
-                    <div class="model-card-header">
-                      <span class="model-name" :title="model.name">{{ model.name }}</span>
-                      <el-tag size="small" :type="getTagType(model.power)" style="flex-shrink: 0">
+                    <div class="model-card-header flex justify-between items-start mb-2">
+                      <span class="model-name font-bold text-sm truncate max-w-[170px]" :title="model.name">{{ model.name }}</span>
+                      <span :class="getTagType(model.power) === 'danger' ? 'bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-400' : getTagType(model.power) === 'warning' ? 'bg-amber-100 text-amber-600 dark:bg-amber-900/30 dark:text-amber-400' : 'bg-slate-100 text-slate-600 dark:bg-slate-700 dark:text-slate-400'" class="px-2 py-0.5 text-xs rounded flex-shrink-0">
                         {{ model.power > 0 ? `${model.power}算力` : '免费' }}
-                      </el-tag>
+                      </span>
                     </div>
-                    <div class="model-description" :title="model.desc || '暂无描述'">
+                    <div class="model-description text-xs text-slate-500 dark:text-slate-400 line-clamp-3 mb-3" :title="model.desc || '暂无描述'">
                       {{ model.desc || '暂无描述' }}
                     </div>
-                    <!-- 暂时屏蔽此信息展示，或许用户不想展示此信息 -->
-                    <div class="model-metadata">
-                      <div class="model-detail">
-                        <div>响应: {{ model.max_tokens }}</div>
-                        <div>上下文: {{ model.max_context }}</div>
-                      </div>
+                    <div class="model-detail flex justify-between text-xs text-slate-400">
+                      <div>响应: {{ model.max_tokens }}</div>
+                      <div>上下文: {{ model.max_context }}</div>
                     </div>
                   </div>
                 </div>
               </div>
-            </el-popover>
-
-            <div class="flex-center ml-2">
-              <el-dropdown :hide-on-click="false" trigger="click">
-                <span class="setting"><i class="iconfont icon-plugin"></i></span>
-                <template #dropdown>
-                  <el-dropdown-menu class="tools-dropdown">
-                    <el-checkbox-group v-model="toolSelected">
-                      <el-dropdown-item v-for="item in tools" :key="item.id">
-                        <el-checkbox :value="item.id" :label="item.label" />
-                        <el-tooltip :content="item.description" placement="right">
-                          <el-icon><InfoFilled /></el-icon>
-                        </el-tooltip>
-                      </el-dropdown-item>
-                    </el-checkbox-group>
-                  </el-dropdown-menu>
-                </template>
-              </el-dropdown>
-
-              <span class="setting" @click="showChatSetting = true">
-                <i class="iconfont icon-config"></i>
-              </span>
             </div>
+
+            <!-- Tools Dropdown -->
+            <div class="relative">
+              <button @click="showToolsDropdown = !showToolsDropdown" class="setting p-2 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg">
+                <i class="iconfont icon-plugin text-lg"></i>
+              </button>
+              <div
+                v-if="showToolsDropdown"
+                class="absolute left-0 top-full mt-1 bg-white dark:bg-slate-800 rounded-lg shadow-lg border border-slate-200 dark:border-slate-600 z-50 py-2 min-w-[200px]"
+              >
+                <div v-for="item in tools" :key="item.id" class="flex items-center gap-3 px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-700">
+                  <input
+                    type="checkbox"
+                    :value="item.id"
+                    v-model="toolSelected"
+                    class="w-4 h-4 rounded border-slate-300 text-violet-600 focus:ring-violet-500"
+                  />
+                  <span class="flex-1">{{ item.label }}</span>
+                  <span :title="item.description" class="text-slate-400 cursor-help">
+                    <i class="iconfont icon-tips"></i>
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <button @click="showChatSetting = true" class="setting p-2 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg">
+              <i class="iconfont icon-config text-lg"></i>
+            </button>
           </div>
 
           <div class="flex justify-center">
@@ -281,7 +256,6 @@
 
                 <back-top :right="30" :bottom="155" />
               </div>
-              <!-- end chat box -->
 
               <div class="input-box">
                 <div class="input-box-inner">
@@ -294,84 +268,103 @@
                         </div>
                         <textarea
                           ref="inputRef"
-                          class="prompt-input"
+                          class="prompt-input w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-xl bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 resize-none focus:outline-none focus:ring-2 focus:ring-violet-500"
                           :rows="row"
                           v-model="prompt"
                           @keydown="onInput"
                           @input="onInput"
                           placeholder="按 Enter 键发送消息，使用 Shift + Enter 换行"
                           autofocus
-                        >
-                        </textarea>
+                        ></textarea>
                       </div>
-                      <div class="flex-between">
-                        <div class="flex little-btns">
-                          <!-- <span class="tool-item-btn" @click="realtimeChat">
-                            <el-tooltip
-                              class="box-item"
-                              effect="dark"
-                              :content="
-                                '实时语音对话，每次消耗' + config.advance_voice_power + '算力'
-                              "
-                            >
-                              <i class="iconfont icon-mic-bold"></i>
-                            </el-tooltip>
-                          </span> -->
-
-                          <span class="tool-item-btn">
-                            <el-tooltip class="box-item" effect="dark" content="上传附件">
-                              <file-select
-                                :user-id="loginUser && loginUser.id"
-                                @selected="insertFile"
-                              />
-                            </el-tooltip>
+                      <div class="flex justify-between items-center mt-2">
+                        <div class="flex gap-2">
+                          <span class="tool-item-btn" :title="'上传附件'">
+                            <file-select
+                              :user-id="loginUser && loginUser.id"
+                              @selected="insertFile"
+                            />
                           </span>
                         </div>
-                        <div class="flex little-btns">
+                        <div class="flex gap-2">
                           <span class="send-btn tool-item-btn">
-                            <el-button type="info" v-if="isGenerating" @click="stopGenerate" plain>
-                              <el-icon>
-                                <VideoPause />
-                              </el-icon>
-                            </el-button>
-                            <el-button
-                              @click="sendMessage()"
-                              style="color: #754ff6"
-                              :disabled="isGenerating"
-                              v-else
+                            <button
+                              v-if="isGenerating"
+                              @click="stopGenerate"
+                              class="px-4 py-2 bg-slate-500 hover:bg-slate-600 text-white rounded-lg flex items-center gap-2"
                             >
-                              <el-tooltip class="box-item" effect="dark" content="发送">
-                                <el-icon><Promotion /></el-icon>
-                              </el-tooltip>
-                            </el-button>
+                              <i class="iconfont icon-stop"></i>
+                            </button>
+                            <button
+                              v-else
+                              @click="sendMessage()"
+                              :disabled="isGenerating"
+                              class="px-4 py-2 bg-violet-600 hover:bg-violet-700 text-white rounded-lg disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                            >
+                              <i class="iconfont icon-send"></i>
+                            </button>
                           </span>
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
-                <!-- end input box -->
               </div>
             </div>
-            <!-- end container -->
           </div>
-          <!-- end loading -->
         </div>
-      </el-main>
-    </el-container>
+      </main>
 
     <ChatSetting :show="showChatSetting" @hide="showChatSetting = false" />
 
-    <el-dialog v-model="showConversationDialog" title="实时语音通话" :fullscreen="true">
-      <div v-loading="!frameLoaded">
-        <iframe
-          style="width: 100%; height: calc(100vh - 100px); border: none"
-          :src="voiceChatUrl"
-          @load="frameLoaded = true"
-          allow="microphone *;camera *;"
-        ></iframe>
+    <!-- Voice Chat Dialog -->
+    <teleport to="body">
+      <div v-if="showConversationDialog" class="fixed inset-0 bg-black z-50 flex flex-col">
+        <div class="flex justify-end p-4">
+          <button @click="showConversationDialog = false" class="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center text-white">
+            <i class="iconfont icon-close"></i>
+          </button>
+        </div>
+        <div class="flex-1 flex items-center justify-center">
+          <div v-if="!frameLoaded" class="w-10 h-10 border-4 border-violet-600 border-t-transparent rounded-full animate-spin"></div>
+          <iframe
+            v-show="frameLoaded"
+            style="width: 100%; height: calc(100vh - 100px); border: none"
+            :src="voiceChatUrl"
+            @load="frameLoaded = true"
+            allow="microphone *;camera *;"
+          ></iframe>
+        </div>
       </div>
-    </el-dialog>
+    </teleport>
+
+    <!-- Edit Message Dialog -->
+    <teleport to="body">
+      <div v-if="showEditDialog" class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center" @click.self="showEditDialog = false">
+        <div class="bg-white dark:bg-slate-800 rounded-xl p-6 w-full max-w-md mx-4 shadow-2xl">
+          <div class="flex justify-between items-center mb-4">
+            <h3 class="text-lg font-semibold text-slate-900 dark:text-slate-100">编辑消息</h3>
+            <button @click="showEditDialog = false" class="p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700">
+              <i class="iconfont icon-close"></i>
+            </button>
+          </div>
+          <textarea
+            v-model="editMessageContent"
+            rows="4"
+            class="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 resize-none"
+            placeholder="请输入消息内容"
+          ></textarea>
+          <div class="flex justify-end gap-3 mt-4">
+            <button @click="showEditDialog = false" class="px-4 py-2 bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 rounded-lg">
+              取消
+            </button>
+            <button @click="confirmEdit" class="px-4 py-2 bg-violet-600 hover:bg-violet-700 text-white rounded-lg">
+              确定
+            </button>
+          </div>
+        </div>
+      </div>
+    </teleport>
   </div>
 </template>
 <script setup>
@@ -382,24 +375,11 @@ import ChatSetting from '@/components/ChatSetting.vue'
 import FileList from '@/components/FileList.vue'
 import FileSelect from '@/components/FileSelect.vue'
 import Welcome from '@/components/Welcome.vue'
-import { checkSession, getClientId, getSystemInfo } from '@/store/cache'
-import { useSharedStore } from '@/store/sharedata'
-import { closeLoading, showLoading, showMessageError, showMessageInfo } from '@/utils/dialog'
+import { closeLoading, showLoading, showMessageError, showMessageInfo, showMessageSuccess, showConfirmDialog } from '@/utils/dialog'
 import { httpGet, httpPost } from '@/utils/http'
 import { isMobile, randString, removeArrayItem, UUID } from '@/utils/libs'
-import {
-  Delete,
-  Edit,
-  InfoFilled,
-  More,
-  Promotion,
-  Search,
-  Share,
-  VideoPause,
-} from '@element-plus/icons-vue'
 import { fetchEventSource } from '@microsoft/fetch-event-source'
 import Clipboard from 'clipboard'
-import { ElMessage, ElMessageBox } from 'element-plus'
 import 'highlight.js/styles/a11y-dark.css'
 import { computed, nextTick, onMounted, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
@@ -445,6 +425,9 @@ const tools = ref([])
 const toolSelected = ref([])
 const stream = ref(store.chatStream)
 const modelSelectorRef = ref(null)
+const showModelSelector = ref(false)
+const showToolsDropdown = ref(false)
+const activeDropdown = ref(null)
 // 过滤后的模型列表
 const filteredModels = computed(() => {
   if (!modelSearchKeyword.value && !showFreeModelsOnly.value && !activeCategory.value) {
@@ -560,8 +543,12 @@ const getSelectedModel = () => {
 // 选择模型
 const selectModel = (model) => {
   modelID.value = model.id
-  modelSelectorRef.value.hide()
+  showModelSelector.value = false
   _newChat()
+}
+
+const toggleDropdown = (chat) => {
+  activeDropdown.value = activeDropdown.value === chat.chat_id ? null : chat.chat_id
 }
 
 // 根据算力获取标签类型
@@ -620,7 +607,7 @@ getSystemInfo()
     logo.value = res.data.bar_logo
   })
   .catch((e) => {
-    ElMessage.error('获取系统配置失败：' + e.message)
+    showMessageError('获取系统配置失败：' + e.message)
   })
 
 // 获取工具函数
@@ -644,11 +631,11 @@ onMounted(() => {
 
   const clipboard = new Clipboard('.copy-reply, .copy-code-btn')
   clipboard.on('success', () => {
-    ElMessage.success('复制成功！')
+    showMessageSuccess('复制成功！')
   })
 
   clipboard.on('error', () => {
-    ElMessage.error('复制失败！')
+    showMessageError('复制失败！')
   })
 
   window.onresize = () => resizeElement()
@@ -804,7 +791,7 @@ const sendSSERequest = async (message) => {
         } catch (error) {
           console.error('Error processing message:', error)
           isGenerating.value = false
-          ElMessage.error('消息处理出错，请重试')
+          showMessageError('消息处理出错，请重试')
         }
       },
       onerror(err) {
@@ -829,7 +816,7 @@ const sendSSERequest = async (message) => {
   } catch (error) {
     console.error('Failed to send message:', error)
     isGenerating.value = false
-    ElMessage.error('发送消息失败，请重试')
+    showMessageError('发送消息失败，请重试')
   }
 }
 
@@ -1009,10 +996,10 @@ const stopPropagation = (e) => {
 // 确认修改
 const editConfirm = function (chat) {
   if (tmpChatTitle.value === '') {
-    return ElMessage.error('请输入会话标题！')
+    return showMessageError('请输入会话标题！')
   }
   if (!chat.chat_id) {
-    return ElMessage.error('对话 ID 为空，请刷新页面再试！')
+    return showMessageError('对话 ID 为空，请刷新页面再试！')
   }
   if (tmpChatTitle.value === chat.title) {
     chat.edit = false
@@ -1028,15 +1015,14 @@ const editConfirm = function (chat) {
       chat.edit = false
     })
     .catch((e) => {
-      ElMessage.error('操作失败：' + e.message)
+      showMessageError('操作失败：' + e.message)
     })
 }
 // 删除会话
 const removeChat = function (chat) {
-  ElMessageBox.confirm(`该操作会删除"${chat.title}"`, '删除聊天', {
-    confirmButtonText: '删除',
-    cancelButtonText: '取消',
-    type: 'warning',
+  showConfirmDialog({
+    title: '删除聊天',
+    message: `该操作会删除"${chat.title}"`,
   })
     .then(() => {
       httpGet('/api/chat/remove?chat_id=' + chat.chat_id)
@@ -1048,7 +1034,7 @@ const removeChat = function (chat) {
           _newChat()
         })
         .catch((e) => {
-          ElMessage.error('操作失败：' + e.message)
+          showMessageError('操作失败：' + e.message)
         })
     })
     .catch(() => {})
@@ -1087,25 +1073,20 @@ const autofillPrompt = (text) => {
 }
 
 const clearAllChats = function () {
-  ElMessageBox.confirm('清除所有对话?此操作不可撤销！', '警告', {
-    confirmButtonText: '删除对话',
-    cancelButtonText: '取消',
-
-    dangerouslyUseHTMLString: true,
-    showClose: true,
-    closeOnClickModal: false,
-    center: false,
+  showConfirmDialog({
+    title: '警告',
+    message: '清除所有对话?此操作不可撤销！',
   })
     .then(() => {
       httpGet('/api/chat/clear')
         .then(() => {
-          ElMessage.success('操作成功！')
+          showMessageSuccess('操作成功！')
           chatData.value = []
           chatList.value = []
           newChat()
         })
         .catch((e) => {
-          ElMessage.error('操作失败：' + e.message)
+          showMessageError('操作失败：' + e.message)
         })
     })
     .catch(() => {})
@@ -1151,7 +1132,7 @@ const loadChatHistory = function (chatId) {
     })
     .catch((e) => {
       // TODO: 显示重新加载按钮
-      ElMessage.error('加载聊天记录失败：' + e.message)
+      showMessageError('加载聊天记录失败：' + e.message)
     })
 }
 
@@ -1174,7 +1155,7 @@ const stopGenerate = function () {
 const reGenerate = function (messageId) {
   // 恢复发送按钮状态
   if (isGenerating.value) {
-    ElMessage.warning('AI 正在作答中，请稍后...')
+    showMessageInfo('AI 正在作答中，请稍后...')
     return
   }
 
@@ -1183,7 +1164,7 @@ const reGenerate = function (messageId) {
 
   // 判断 messageId 是整数
   if (messageId !== '' && isNaN(messageId)) {
-    ElMessage.warning('消息 ID 不合法，无法重新生成')
+    showMessageInfo('消息 ID 不合法，无法重新生成')
     return
   }
 
@@ -1217,60 +1198,40 @@ const editUserPrompt = function (messageId) {
 
   if (messageIndex === -1) return
 
-  // 弹出编辑对话框
-  ElMessageBox.prompt('', '编辑消息', {
-    confirmButtonText: '确定',
-    cancelButtonText: '取消',
-    inputValue: messageContent,
-    inputType: 'textarea',
-    customClass: 'edit-prompt-dialog',
-    roundButton: true,
+  editMessageIndex.value = messageIndex
+  editMessageContent.value = messageContent
+  showEditDialog.value = true
+}
+
+// 编辑对话框
+const showEditDialog = ref(false)
+const editMessageIndex = ref(0)
+const editMessageContent = ref('')
+
+const confirmEdit = () => {
+  if (editMessageContent.value.trim() === '') {
+    showMessageInfo('消息内容不能为空')
+    return
+  }
+
+  // 更新用户消息
+  chatData.value[editMessageIndex.value].content = editMessageContent.value
+
+  // 移除该消息之后的所有消息
+  chatData.value = chatData.value.slice(0, editMessageIndex.value + 1)
+
+  // 添加空回复消息
+  const _role = getRoleById(roleId.value)
+  chatData.value.push({
+    chat_id: chatId,
+    role_id: roleId.value,
+    type: 'reply',
+    id: randString(32),
+    icon: _role['icon'],
+    content: '',
   })
-    .then(({ value }) => {
-      if (value.trim() === '') {
-        ElMessage.warning('消息内容不能为空')
-        return
-      }
 
-      // 更新用户消息
-      chatData.value[messageIndex].content = value
-
-      // 移除该消息之后的所有消息
-      chatData.value = chatData.value.slice(0, messageIndex + 1)
-
-      // 添加空回复消息
-      const _role = getRoleById(roleId.value)
-      chatData.value.push({
-        chat_id: chatId,
-        role_id: roleId.value,
-        type: 'reply',
-        id: randString(32),
-        icon: _role['icon'],
-        content: '',
-      })
-
-      disableInput(false)
-
-      // 发送编辑后的消息
-      store.socket.conn.send(
-        JSON.stringify({
-          channel: 'chat',
-          type: 'text',
-          body: {
-            role_id: roleId.value,
-            model_id: modelID.value,
-            chat_id: chatId.value,
-            content: value,
-            tools: toolSelected.value,
-            stream: stream.value,
-            edit_message: true,
-          },
-        })
-      )
-    })
-    .catch(() => {
-      // 取消编辑
-    })
+  showEditDialog.value = false
 }
 
 const chatName = ref('')
@@ -1294,7 +1255,7 @@ const searchChat = function (e) {
 // 导出会话
 const shareChat = (chat) => {
   if (!chat.chat_id) {
-    return ElMessage.error('请先选中一个会话')
+    return showMessageError('请先选中一个会话')
   }
 
   const url = location.protocol + '//' + location.host + '/chat/export?chat_id=' + chat.chat_id
@@ -1354,199 +1315,4 @@ const realtimeChat = () => {
 
 <style lang="scss">
 @use '@/assets/css/markdown/vue.css' as *;
-@use 'sass:color';
-
-.input-container {
-  .el-textarea {
-    .el-textarea__inner {
-      padding-right: 40px;
-    }
-  }
-}
-
-.model-selector-popover {
-  max-width: 820px !important;
-}
-
-.el-popper.model-selector-popover {
-  left: 50% !important;
-  transform: translateX(-50%) !important;
-}
-
-.model-selector-container {
-  padding: 16px;
-
-  .model-search {
-    margin-bottom: 15px;
-    display: flex;
-    align-items: center;
-  }
-
-  .category-tabs {
-    display: flex;
-    flex-wrap: wrap;
-    border-bottom: 1px solid #e4e7ed;
-    margin-bottom: 16px;
-
-    .category-tab {
-      padding: 8px 16px;
-      cursor: pointer;
-      margin-right: 8px;
-      margin-bottom: -1px;
-      font-size: 14px;
-      color: #606266;
-      transition: all 0.2s;
-      border-bottom: 2px solid transparent;
-
-      &:hover {
-        color: #409eff;
-      }
-
-      &.active {
-        color: #409eff;
-        border-bottom-color: #409eff;
-        font-weight: 500;
-      }
-
-      &.reset-filter {
-        color: #f56c6c;
-        margin-left: auto;
-
-        &:hover {
-          color: color.adjust(#f56c6c, $lightness: -10%);
-        }
-      }
-    }
-  }
-
-  .no-results {
-    padding: 30px;
-    text-align: center;
-  }
-
-  .models-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 16px;
-    max-height: 450px;
-    overflow-y: auto;
-    padding: 4px 4px 16px 4px;
-  }
-
-  .model-card {
-    border: 1px solid #dcdfe6;
-    border-radius: 6px;
-    padding: 14px;
-    cursor: pointer;
-    transition: all 0.25s ease;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    min-width: 0; /* 防止内容溢出 */
-
-    &:hover {
-      border-color: #409eff;
-      transform: translateY(-2px);
-      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
-    }
-
-    &.selected {
-      border-color: #409eff;
-      background-color: #ecf5ff;
-    }
-
-    .model-card-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      margin-bottom: 8px;
-
-      .model-name {
-        font-weight: bold;
-        word-break: break-word;
-        display: -webkit-box;
-        -webkit-line-clamp: 3;
-        -webkit-box-orient: vertical;
-        overflow: hidden;
-        line-height: 1.3;
-        max-width: 170px;
-        margin-right: 8px;
-      }
-    }
-
-    .model-description {
-      font-size: 12px;
-      color: #606266;
-      margin-bottom: 10px;
-      display: -webkit-box;
-      -webkit-line-clamp: 3;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      line-height: 1.4;
-      flex-grow: 1;
-    }
-
-    //.model-metadata {
-    //  display: flex;
-    //  flex-direction: column;
-    //  margin-top: auto;
-    //}
-
-    .model-detail {
-      display: flex;
-      justify-content: space-between;
-      font-size: 12px;
-      color: #909399;
-    }
-  }
-}
-
-.adaptive-width-button {
-  min-width: 180px;
-  max-width: 350px;
-  width: auto !important;
-  padding-left: 15px;
-  padding-right: 15px;
-}
-
-.selected-model-display {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  .model-name-text {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    max-width: 280px;
-  }
-}
-
-.customer-service-content {
-  text-align: center;
-  padding: 10px 0;
-
-  .service-tip {
-    font-size: 16px;
-    color: #303133;
-    margin-bottom: 15px;
-  }
-
-  .qrcode-image {
-    width: 200px;
-    height: 200px;
-    margin: 0 auto;
-  }
-
-  .service-note {
-    font-size: 14px;
-    color: #909399;
-    margin-top: 15px;
-  }
-}
-
-.customer-service-btn {
-  margin-left: 8px;
-}
 </style>

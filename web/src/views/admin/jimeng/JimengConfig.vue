@@ -19,14 +19,14 @@
                 <a
                   href="https://console.volcengine.com/ai/ability/detail/10"
                   target="_blank"
-                  class="text-blue-500"
+                  class="text-violet-500 dark:text-violet-400"
                   >即梦 AI</a
                 >
                 和
                 <a
                   href="https://console.volcengine.com/ai/ability/detail/9"
                   target="_blank"
-                  class="text-blue-500"
+                  class="text-violet-500 dark:text-violet-400"
                   >智能绘图</a
                 >
                 服务。
@@ -36,7 +36,7 @@
                 <a
                   href="https://console.volcengine.com/iam/keymanage/"
                   target="_blank"
-                  class="text-blue-500"
+                  class="text-violet-500 dark:text-violet-400"
                   >秘钥管理</a
                 >
                 获取。

@@ -1,5 +1,5 @@
 <template>
-  <div class="settings container p-5">
+  <div class="settings container p-5 dark:bg-slate-900 dark:text-gray-100">
     <el-tabs v-model="activeTab" type="border-card">
       <el-tab-pane label="邮件服务设置" name="smtp">
         <Alert type="info">
@@ -135,6 +135,55 @@ const saveConfig = async () => {
   }
   .el-form-item__label {
     font-weight: 700;
+  }
+}
+
+:deep(.el-tabs__header) {
+  .el-tabs__item {
+    &.is-active {
+      color: #409eff;
+    }
+    &:hover {
+      color: #409eff;
+    }
+  }
+  .el-tabs__nav-wrap::after {
+    background-color: #4b5563;
+  }
+  .el-tabs__active-bar {
+    background-color: #409eff;
+  }
+}
+
+.dark {
+  .settings {
+    a {
+      color: #60a9fa;
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+    .el-form-item__label {
+      color: #e2e8f0;
+    }
+  }
+  .el-tabs__content {
+    background-color: #1e293b;
+    border-color: #334155;
+  }
+  .el-tabs__header {
+    background-color: #1e293b;
+    border-color: #334155;
+  }
+  .el-input__wrapper {
+    background-color: #334155;
+    box-shadow: 0 0 0 1px #475569 inset;
+  }
+  .el-input__inner {
+    color: #f1f5f9;
+    &::placeholder {
+      color: #94a3b8;
+    }
   }
 }
 </style>

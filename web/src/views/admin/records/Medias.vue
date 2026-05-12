@@ -440,7 +440,7 @@ const showLyric = (item) => {
       position: absolute;
       bottom: 6px;
       right: 0;
-      background-color: rgba(255, 255, 255, 0.7);
+      @apply bg-white/70 dark:bg-slate-800/70;
       padding: 0 3px;
       font-family: 'Input Sans';
       font-size: 14px;
@@ -456,9 +456,9 @@ const showLyric = (item) => {
       left: 50%;
       border: none;
       border-radius: 5px;
-      background: rgba(100, 100, 100, 0.3);
+      @apply bg-black/30 dark:bg-slate-700/30;
       cursor: pointer;
-      color: #ffffff;
+      @apply text-white;
       opacity: 0;
       transform: translate(-50%, 0px);
       transition: opacity 0.3s ease 0s;

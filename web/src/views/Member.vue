@@ -1,167 +1,164 @@
 <template>
-  <div>
-    <div
-      class="member custom-scroll"
-      v-loading="loading"
-      element-loading-background="rgba(255,255,255,.3)"
-      :element-loading-text="loadingText"
-    >
-      <div class="inner">
-        <el-card class="profile-card">
-          <el-row class="user-opt" :gutter="16">
-            <el-col :span="24">
-              <el-button class="profile-btn email" @click="showBindEmailDialog = true">
-                <i class="iconfont icon-email"></i> 绑定邮箱
-              </el-button>
-            </el-col>
-            <el-col :span="24">
-              <el-button class="profile-btn mobile" @click="showBindMobileDialog = true">
-                <i class="iconfont icon-mobile"></i> 绑定手机
-              </el-button>
-            </el-col>
-            <el-col :span="24">
-              <el-button class="profile-btn password" @click="showPasswordDialog = true">
-                <i class="iconfont icon-password"></i> 修改密码
-              </el-button>
-            </el-col>
-            <el-divider />
-            <el-col :span="24">
-              <el-button class="profile-btn redeem" @click="showRedeemVerifyDialog = true">
-                <i class="iconfont icon-redeem"></i> 卡密兑换
-              </el-button>
-            </el-col>
-          </el-row>
-        </el-card>
-        <div class="profile-bg"></div>
+  <div class="member p-4">
+    <div class="inner max-w-6xl mx-auto">
+      <!-- Profile Card -->
+      <div class="bg-white dark:bg-slate-800 rounded-xl p-6 mb-6 shadow-sm">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <button
+            @click="showBindEmailDialog = true"
+            class="flex items-center gap-3 p-4 bg-slate-50 dark:bg-slate-700 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-600 transition-colors"
+          >
+            <i class="iconfont icon-email text-xl text-violet-600"></i>
+            <span class="text-slate-700 dark:text-slate-300">绑定邮箱</span>
+          </button>
+          <button
+            @click="showBindMobileDialog = true"
+            class="flex items-center gap-3 p-4 bg-slate-50 dark:bg-slate-700 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-600 transition-colors"
+          >
+            <i class="iconfont icon-mobile text-xl text-violet-600"></i>
+            <span class="text-slate-700 dark:text-slate-300">绑定手机</span>
+          </button>
+          <button
+            @click="showPasswordDialog = true"
+            class="flex items-center gap-3 p-4 bg-slate-50 dark:bg-slate-700 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-600 transition-colors"
+          >
+            <i class="iconfont icon-password text-xl text-violet-600"></i>
+            <span class="text-slate-700 dark:text-slate-300">修改密码</span>
+          </button>
+          <button
+            @click="showRedeemVerifyDialog = true"
+            class="flex items-center gap-3 p-4 bg-slate-50 dark:bg-slate-700 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-600 transition-colors"
+          >
+            <i class="iconfont icon-redeem text-xl text-violet-600"></i>
+            <span class="text-slate-700 dark:text-slate-300">卡密兑换</span>
+          </button>
+        </div>
+      </div>
 
-        <div class="product-box">
-          <el-row v-if="list.length > 0" :gutter="24" class="list-box">
-            <el-col
-              v-for="item in list"
-              :key="item"
-              :xs="24"
-              :sm="12"
-              :md="8"
-              :lg="6"
-              class="product-col"
-            >
-              <div class="product-item">
-                <div class="product-header">
-                  <div class="image-container">
-                    <el-image :src="vipImg" fit="cover" />
-                    <div class="image-overlay">
-                      <div class="vip-badge">热销</div>
-                    </div>
-                  </div>
-                  <div class="product-title">
-                    <h3 class="name">{{ item.name }}</h3>
-                    <p class="description">算力值：{{ item.power }}</p>
-                  </div>
-                </div>
-
-                <div class="product-content">
-                  <div class="price-section">
-                    <div class="price-info">
-                      <span class="currency">￥</span>
-                      <span class="price-value">{{ item.price }}</span>
-                    </div>
-                  </div>
-
-                  <div class="features-list" v-if="item.features">
-                    <div class="feature-item" v-for="feature in item.features" :key="feature">
-                      <i class="iconfont icon-check"></i>
-                      <span>{{ feature }}</span>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="product-actions">
-                  <div class="payment-buttons">
-                    <button class="payment-btn wechat-btn" @click="wxPay(item)">
-                      <i class="iconfont icon-wechat-pay"></i>
-                      <span>微信支付</span>
-                    </button>
-                    <button class="payment-btn alipay-btn" @click="alipay(item)">
-                      <i class="iconfont icon-alipay"></i>
-                      <span>支付宝</span>
-                    </button>
-                  </div>
+      <!-- Product List -->
+      <div class="product-box">
+        <div v-if="list.length > 0" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-8">
+          <div
+            v-for="item in list"
+            :key="item.id"
+            class="product-item bg-white dark:bg-slate-800 rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow"
+          >
+            <div class="product-header relative">
+              <div class="image-container h-40 bg-slate-100 dark:bg-slate-700">
+                <img :src="vipImg" class="w-full h-full object-cover" />
+                <div class="image-overlay absolute inset-0 bg-black/40 flex items-center justify-center">
+                  <span class="vip-badge bg-amber-500 text-white px-3 py-1 rounded-full text-sm font-medium">热销</span>
                 </div>
               </div>
-            </el-col>
-          </el-row>
-          <el-empty description="暂无数据" v-else :image="nodata" />
-          <div class="box-card">
-            <h2 class="headline">消费账单</h2>
+              <div class="product-title p-4">
+                <h3 class="name font-semibold text-slate-900 dark:text-slate-100">{{ item.name }}</h3>
+                <p class="description text-sm text-slate-500 dark:text-slate-400">算力值：{{ item.power }}</p>
+              </div>
+            </div>
 
-            <div class="user-order">
-              <user-order v-if="isLogin" :key="userOrderKey" />
+            <div class="product-content p-4 pt-0">
+              <div class="price-section mb-4">
+                <div class="price-info">
+                  <span class="currency text-lg text-slate-500">￥</span>
+                  <span class="price-value text-2xl font-bold text-slate-900 dark:text-slate-100">{{ item.price }}</span>
+                </div>
+              </div>
+
+              <div class="features-list space-y-2 mb-4" v-if="item.features">
+                <div class="feature-item flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400" v-for="feature in item.features" :key="feature">
+                  <i class="iconfont icon-check text-green-500"></i>
+                  <span>{{ feature }}</span>
+                </div>
+              </div>
+
+              <div class="payment-buttons flex gap-2">
+                <button class="flex-1 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg flex items-center justify-center gap-1" @click="wxPay(item)">
+                  <i class="iconfont icon-wechat-pay"></i>
+                  <span>微信</span>
+                </button>
+                <button class="flex-1 py-2 bg-violet-500 hover:bg-violet-600 text-white rounded-lg flex items-center justify-center gap-1" @click="alipay(item)">
+                  <i class="iconfont icon-alipay"></i>
+                  <span>支付宝</span>
+                </button>
+              </div>
             </div>
           </div>
         </div>
+        <div v-else class="text-center py-12 text-slate-400">
+          <i class="iconfont icon-empty text-5xl mb-3"></i>
+          <p>暂无数据</p>
+        </div>
       </div>
 
-      <password-dialog
-        v-if="isLogin"
-        :show="showPasswordDialog"
-        @hide="showPasswordDialog = false"
-      />
-
-      <!-- 绑定手机弹窗 -->
-      <el-dialog
-        v-model="showBindMobileDialog"
-        title="绑定手机"
-        width="400px"
-        :close-on-click-modal="true"
-        @close="showBindMobileDialog = false"
-      >
-        <bind-mobile @hide="showBindMobileDialog = false" />
-      </el-dialog>
-
-      <!-- 绑定邮箱弹窗 -->
-      <el-dialog
-        v-model="showBindEmailDialog"
-        title="绑定邮箱"
-        width="400px"
-        :close-on-click-modal="true"
-        @close="showBindEmailDialog = false"
-      >
-        <bind-email @hide="showBindEmailDialog = false" />
-      </el-dialog>
-
-      <!-- 卡密兑换弹窗 -->
-      <el-dialog
-        v-model="showRedeemVerifyDialog"
-        title="卡密兑换"
-        width="450px"
-        :close-on-click-modal="true"
-        @close="showRedeemVerifyDialog = false"
-      >
-        <redeem-verify @hide="redeemCallback" />
-      </el-dialog>
+      <!-- Orders -->
+      <div class="box-card mt-8">
+        <h2 class="text-xl pb-4 text-slate-900 dark:text-slate-100">消费账单</h2>
+        <user-order v-if="isLogin" :key="userOrderKey" />
+      </div>
     </div>
 
-    <!--支付二维码-->
-    <el-dialog
-      v-model="showQrCode"
-      :show-close="true"
-      style="width: 334px; height: 368px"
-      class="pay-dialog"
-    >
-      <template #header>
-        <div class="flex items-center justify-center text-base">
-          <span style="color: var(--el-text-color-regular)">{{ title }}</span>
+    <!-- Dialogs -->
+    <password-dialog v-if="isLogin" :show="showPasswordDialog" @hide="showPasswordDialog = false" />
+
+    <teleport to="body">
+      <div v-if="showBindMobileDialog" class="fixed inset-0 bg-black/50 z-40 flex items-center justify-center" @click.self="showBindMobileDialog = false">
+        <div class="bg-white dark:bg-slate-800 rounded-xl p-6 w-full max-w-md mx-4">
+          <div class="flex justify-between items-center mb-4">
+            <h3 class="text-lg font-semibold text-slate-900 dark:text-slate-100">绑定手机</h3>
+            <button @click="showBindMobileDialog = false" class="p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700">
+              <i class="iconfont icon-close"></i>
+            </button>
+          </div>
+          <bind-mobile @hide="showBindMobileDialog = false" />
         </div>
-      </template>
-      <div class="qr-container">
-        <el-image :src="qrImg" style="height: 300px; width: 300px" />
       </div>
-    </el-dialog>
+    </teleport>
+
+    <teleport to="body">
+      <div v-if="showBindEmailDialog" class="fixed inset-0 bg-black/50 z-40 flex items-center justify-center" @click.self="showBindEmailDialog = false">
+        <div class="bg-white dark:bg-slate-800 rounded-xl p-6 w-full max-w-md mx-4">
+          <div class="flex justify-between items-center mb-4">
+            <h3 class="text-lg font-semibold text-slate-900 dark:text-slate-100">绑定邮箱</h3>
+            <button @click="showBindEmailDialog = false" class="p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700">
+              <i class="iconfont icon-close"></i>
+            </button>
+          </div>
+          <bind-email @hide="showBindEmailDialog = false" />
+        </div>
+      </div>
+    </teleport>
+
+    <teleport to="body">
+      <div v-if="showRedeemVerifyDialog" class="fixed inset-0 bg-black/50 z-40 flex items-center justify-center" @click.self="showRedeemVerifyDialog = false">
+        <div class="bg-white dark:bg-slate-800 rounded-xl p-6 w-full max-w-md mx-4">
+          <div class="flex justify-between items-center mb-4">
+            <h3 class="text-lg font-semibold text-slate-900 dark:text-slate-100">卡密兑换</h3>
+            <button @click="showRedeemVerifyDialog = false" class="p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700">
+              <i class="iconfont icon-close"></i>
+            </button>
+          </div>
+          <redeem-verify @hide="redeemCallback" />
+        </div>
+      </div>
+    </teleport>
+
+    <!-- QR Code Dialog -->
+    <teleport to="body">
+      <div v-if="showQrCode" class="fixed inset-0 bg-black/50 z-40 flex items-center justify-center" @click.self="showQrCode = false">
+        <div class="bg-white dark:bg-slate-800 rounded-xl p-6 w-80 mx-4">
+          <div class="text-center mb-4">
+            <span class="text-slate-700 dark:text-slate-300">{{ title }}</span>
+          </div>
+          <div class="qr-container">
+            <img :src="qrImg" class="w-64 h-64 mx-auto" />
+          </div>
+        </div>
+      </div>
+    </teleport>
   </div>
 </template>
 
 <script setup>
-import nodata from '@/assets/img/no-data.png'
 import BindEmail from '@/components/BindEmail.vue'
 import BindMobile from '@/components/BindMobile.vue'
 import PasswordDialog from '@/components/PasswordDialog.vue'
@@ -169,16 +166,15 @@ import RedeemVerify from '@/components/RedeemVerify.vue'
 import UserOrder from '@/components/UserOrder.vue'
 import { checkSession, getSystemInfo } from '@/store/cache'
 import { useSharedStore } from '@/store/sharedata'
-import { closeLoading, showLoading } from '@/utils/dialog'
+import { showLoading, closeLoading, showMessageInfo, showMessageError } from '@/utils/dialog'
 import { httpGet, httpPost } from '@/utils/http'
 import { isMobile } from '@/utils/libs'
-import { ElMessage } from 'element-plus'
 import QRCode from 'qrcode'
 import { onMounted, onUnmounted, ref } from 'vue'
 
 const list = ref([])
 const vipImg = ref('/images/menu/member.png')
-const enableReward = ref(false) // 是否启用众筹功能
+const enableReward = ref(false)
 const rewardImg = ref('/images/reward.png')
 const showPasswordDialog = ref(false)
 const showBindMobileDialog = ref(false)
@@ -187,7 +183,7 @@ const showRedeemVerifyDialog = ref(false)
 const user = ref(null)
 const isLogin = ref(false)
 const orderTimeout = ref(1800)
-const loading = ref(true)
+const loading = ref(false)
 const loadingText = ref('加载中...')
 
 const store = useSharedStore()
@@ -213,7 +209,7 @@ onMounted(() => {
       loading.value = false
     })
     .catch((e) => {
-      ElMessage.error('获取产品套餐失败：' + e.message)
+      showMessageError('获取产品套餐失败：' + e.message)
     })
 
   getSystemInfo()
@@ -225,7 +221,7 @@ onMounted(() => {
       }
     })
     .catch((e) => {
-      ElMessage.error('获取系统配置失败：' + e.message)
+      showMessageError('获取系统配置失败：' + e.message)
     })
 })
 
@@ -244,7 +240,6 @@ const alipay = (product) => {
 
 const generateOrder = (payWay) => {
   showLoading('正在生成支付订单...')
-  // 生成支付订单
   httpPost('/api/payment/create', {
     pid: selectedPid.value,
     pay_way: payWay,
@@ -258,13 +253,10 @@ const generateOrder = (payWay) => {
         window.location.href = res.data.pay_url
       } else {
         QRCode.toDataURL(res.data.pay_url, { width: 300, height: 300, margin: 2 }, (error, url) => {
-          if (error) {
-            console.error(error)
-          } else {
+          if (!error) {
             qrImg.value = url
           }
         })
-        // 查询订单状态
         if (handler.value) {
           clearTimeout(handler.value)
         }
@@ -274,18 +266,16 @@ const generateOrder = (payWay) => {
     })
     .catch((e) => {
       closeLoading()
-      ElMessage.error('生成支付订单失败：' + e.message)
+      showMessageError('生成支付订单失败：' + e.message)
     })
 }
 
 const queryOrder = async (orderNo) => {
   const res = await httpGet('/api/order/query?order_no=' + orderNo)
   if (res?.data.status === 2) {
-    // 订单支付成功
     clearTimeout(handler.value)
-    ElMessage.success('支付成功')
+    showMessageInfo('支付成功')
     showQrCode.value = false
-    // 更新用户积分
     user.value.scores += res.data.credit
   } else {
     handler.value = setTimeout(() => queryOrder(orderNo), 3000)
@@ -294,13 +284,11 @@ const queryOrder = async (orderNo) => {
 
 const redeemCallback = (success) => {
   showRedeemVerifyDialog.value = false
-
   if (success) {
     userOrderKey.value += 1
   }
 }
 
-// 组件卸载时清理定时器
 onUnmounted(() => {
   if (handler.value) {
     clearTimeout(handler.value)
@@ -309,58 +297,14 @@ onUnmounted(() => {
 })
 </script>
 
-<style lang="scss" scoped>
-@use '@/assets/css/custom-scroll.scss' as *;
-@use '@/assets/css/member.scss' as *;
-
-// 支付弹窗样式优化
-.pay-dialog {
-  .qr-container {
-    text-align: center;
-    position: relative;
-
-    .qr-overlay {
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: rgba(255, 255, 255, 0.9);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-
-      .success-text {
-        background: #67c23a;
-        color: white;
-        border-radius: 4px;
-        font-size: 14px;
-      }
-    }
-  }
+<style scoped>
+.member {
+  min-height: 100vh;
 }
 
-// 支付按钮样式
-.pay-way {
-  .row {
-    margin: 0;
-
-    .col {
-      padding: 0 5px;
-
-      button {
-        border: none;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        font-size: 14px;
-        font-weight: 500;
-
-        &:hover {
-          transform: translateY(-2px);
-          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        }
-      }
-    }
-  }
+.vip-badge {
+  position: absolute;
+  top: 8px;
+  right: 8px;
 }
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <div class="container image-page">
+  <div class="container image-page dark:bg-slate-900">
     <el-tabs v-model="activeName" @tab-change="handleChange">
       <el-tab-pane label="Midjourney" name="mj" v-loading="data.mj.loading">
         <div class="handle-box">
@@ -35,7 +35,12 @@
               <el-table-column prop="user_id" label="用户ID" />
               <el-table-column label="任务类型">
                 <template #default="scope">
-                  <el-button :color="taskTypeTheme[scope.row.type].color" size="small" plain>{{
+                  <el-button
+                    :color="taskTypeTheme[scope.row.type].color"
+                    size="small"
+                    plain
+                    class="dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200"
+                    >{{
                     taskTypeTheme[scope.row.type].text
                   }}</el-button>
                 </template>
@@ -542,6 +547,44 @@ const showImage = (url) => {
     margin-top: 20px;
     display: flex;
     justify-content: center;
+  }
+}
+
+:deep(.el-table) {
+  .dark & {
+    --el-table-bg-color: #1e293b;
+    --el-table-tr-bg-color: #1e293b;
+    --el-table-header-bg-color: #0f172a;
+    --el-table-row-hover-bg-color: #334155;
+    --el-text-color-regular: #e2e8f0;
+    --el-text-color-primary: #f1f5f9;
+  }
+}
+
+:deep(.el-dialog) {
+  .dark & {
+    --el-dialog-bg-color: #1e293b;
+  }
+}
+
+:deep(.el-input__wrapper) {
+  .dark & {
+    background-color: #334155;
+    box-shadow: 0 0 0 1px #475569;
+  }
+}
+
+:deep(.el-pagination) {
+  .dark & {
+    --el-pagination-bg-color: #334155;
+    --el-pagination-button-bg-color: #334155;
+    --el-pagination-hover-color: #60a5fa;
+  }
+}
+
+:deep(.el-tabs__header) {
+  .dark & {
+    --el-tabs-header-height: 48px;
   }
 }
 </style>

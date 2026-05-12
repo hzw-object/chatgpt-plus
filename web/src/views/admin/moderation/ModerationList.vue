@@ -56,7 +56,7 @@
           </div>
 
           <div class="text-sm text-gray-500">
-            共找到 <span class="font-semibold text-blue-600">{{ total }}</span> 条记录
+            共找到 <span class="font-semibold text-violet-600 dark:text-violet-400">{{ total }}</span> 条记录
           </div>
         </div>
       </el-form>
@@ -65,7 +65,7 @@
     <!-- 数据列表 -->
     <el-card shadow="never">
       <div class="table-header flex justify-between items-center mb-4">
-        <h3 class="text-lg font-semibold text-gray-700">审核记录列表</h3>
+        <h3 class="text-lg font-semibold text-gray-700 dark:text-gray-200">审核记录列表</h3>
         <div class="flex space-x-2">
           <el-button
             type="danger"
@@ -92,7 +92,7 @@
 
         <el-table-column prop="username" label="用户名" width="120">
           <template #default="{ row }">
-            <span class="font-medium text-gray-700">{{ row.username || '未知用户' }}</span>
+            <span class="font-medium text-gray-700 dark:text-gray-200">{{ row.username || '未知用户' }}</span>
           </template>
         </el-table-column>
 
@@ -138,7 +138,7 @@
 
         <el-table-column prop="created_at" label="创建时间" width="180" align="center">
           <template #default="{ row }">
-            <span class="text-gray-600">{{ dateFormat(row.created_at) }}</span>
+            <span class="text-gray-600 dark:text-gray-400">{{ dateFormat(row.created_at) }}</span>
           </template>
         </el-table-column>
 
@@ -182,16 +182,16 @@
       <div v-if="currentRecord" class="record-detail">
         <div class="grid grid-cols-1 gap-4">
           <div class="detail-item">
-            <label class="block text-sm font-medium text-gray-700 mb-2">用户信息</label>
-            <div class="bg-gray-50 p-3 rounded">
-              <span class="text-gray-900">{{ currentRecord.username || '未知用户' }}</span>
-              <span class="text-gray-500 ml-4">ID: {{ currentRecord.user_id }}</span>
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">用户信息</label>
+            <div class="bg-gray-50 dark:bg-slate-800 p-3 rounded">
+              <span class="text-gray-900 dark:text-gray-100">{{ currentRecord.username || '未知用户' }}</span>
+              <span class="text-gray-500 dark:text-gray-400 ml-4">ID: {{ currentRecord.user_id }}</span>
             </div>
           </div>
 
           <div class="detail-item">
-            <label class="block text-sm font-medium text-gray-700 mb-2">来源</label>
-            <div class="bg-gray-50 p-3 rounded">
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">来源</label>
+            <div class="bg-gray-50 dark:bg-slate-800 p-3 rounded">
               <el-tag type="primary" size="small">
                 {{ getSourceLabel(currentRecord.source) }}
               </el-tag>
@@ -199,24 +199,24 @@
           </div>
 
           <div class="detail-item">
-            <label class="block text-sm font-medium text-gray-700 mb-2">用户输入</label>
-            <div class="bg-gray-50 p-3 rounded">
-              <pre class="whitespace-pre-wrap text-sm text-gray-900">{{ currentRecord.input }}</pre>
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">用户输入</label>
+            <div class="bg-gray-50 dark:bg-slate-800 p-3 rounded">
+              <pre class="whitespace-pre-wrap text-sm text-gray-900 dark:text-gray-100">{{ currentRecord.input }}</pre>
             </div>
           </div>
 
           <div class="detail-item">
-            <label class="block text-sm font-medium text-gray-700 mb-2">AI 输出</label>
-            <div class="bg-gray-50 p-3 rounded">
-              <pre class="whitespace-pre-wrap text-sm text-gray-900">{{
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">AI 输出</label>
+            <div class="bg-gray-50 dark:bg-slate-800 p-3 rounded">
+              <pre class="whitespace-pre-wrap text-sm text-gray-900 dark:text-gray-100">{{
                 currentRecord.output
               }}</pre>
             </div>
           </div>
 
           <div class="detail-item">
-            <label class="block text-sm font-medium text-gray-700 mb-2">审核结果</label>
-            <div class="bg-gray-50 p-3 rounded">
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">审核结果</label>
+            <div class="bg-gray-50 dark:bg-slate-800 p-3 rounded">
               <div class="flex flex-col !items-start space-y-2">
                 <el-tag
                   type="primary"
@@ -231,9 +231,9 @@
           </div>
 
           <div class="detail-item">
-            <label class="block text-sm font-medium text-gray-700 mb-2">创建时间</label>
-            <div class="bg-gray-50 p-3 rounded">
-              <span class="text-gray-900">{{ dateFormat(currentRecord.created_at) }}</span>
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">创建时间</label>
+            <div class="bg-gray-50 dark:bg-slate-800 p-3 rounded">
+              <span class="text-gray-900 dark:text-gray-100">{{ dateFormat(currentRecord.created_at) }}</span>
             </div>
           </div>
         </div>
@@ -431,8 +431,20 @@ const getSourceLabel = (source) => {
 
 <style lang="scss">
 .moderation-list {
+  --border-color: #e5e7eb;
+  --border-light: #f3f4f6;
+  --text-primary: #374151;
+  --bg-light: #f9fafb;
+
+  .dark & {
+    --border-color: #334155;
+    --border-light: #1e293b;
+    --text-primary: #e2e8f0;
+    --bg-light: #1e293b;
+  }
+
   .page-header {
-    border-bottom: 1px solid #e5e7eb;
+    border-bottom: 1px solid var(--border-color);
     padding-bottom: 1rem;
   }
 
@@ -447,7 +459,7 @@ const getSourceLabel = (source) => {
   }
 
   .table-header {
-    border-bottom: 1px solid #f3f4f6;
+    border-bottom: 1px solid var(--border-light);
     padding-bottom: 1rem;
   }
 
@@ -459,13 +471,13 @@ const getSourceLabel = (source) => {
   .record-detail {
     .detail-item {
       label {
-        color: #374151;
+        color: var(--text-primary);
         font-weight: 500;
       }
 
       .bg-gray-50 {
-        background-color: #f9fafb;
-        border: 1px solid #e5e7eb;
+        background-color: var(--bg-light);
+        border: 1px solid var(--border-color);
       }
     }
   }

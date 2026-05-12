@@ -1,107 +1,74 @@
 <template>
-  <div>
-    <div class="page-mark-map">
-      <div class="inner custom-scroll">
-        <div class="mark-map-box" :style="{ height: leftBoxHeight + 'px' }">
-          <h2>思维导图创作中心</h2>
+  <div class="page-mark-map p-4">
+    <div class="inner flex gap-4 h-[calc(100vh-100px)]">
+      <!-- Left Panel - Controls -->
+      <div class="mark-map-box w-80 flex-shrink-0 overflow-y-auto">
+        <h2 class="text-xl font-bold mb-4 text-slate-900 dark:text-slate-100">思维导图创作中心</h2>
 
-          <div class="mark-map-params">
-            <el-form label-width="80px" label-position="left">
-              <div class="param-line">你的需求？</div>
-              <div class="param-line">
-                <el-input
-                  v-model="prompt"
-                  :autosize="{ minRows: 4, maxRows: 6 }"
-                  type="textarea"
-                  placeholder="请给AI输入提示词，让AI帮你完善"
-                />
-              </div>
+        <div class="space-y-4">
+          <div class="param-line text-sm font-medium text-slate-700 dark:text-slate-300">你的需求？</div>
+          <textarea
+            v-model="prompt"
+            rows="4"
+            class="w-full p-3 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:border-violet-500 outline-none resize-none"
+            placeholder="请给AI输入提示词，让AI帮你完善"
+          />
 
-              <div class="param-line">请选择生成思维导图的AI模型</div>
-              <div class="param-line">
-                <el-select v-model="modelID" placeholder="请选择模型" style="width: 100%">
-                  <el-option
-                    v-for="item in models"
-                    :key="item.id"
-                    :label="item.name"
-                    :value="item.id"
-                  >
-                    <span>{{ item.name }}</span>
-                    <el-tag
-                      style="margin-left: 5px; position: relative; top: -2px"
-                      type="info"
-                      size="small"
-                      >{{ item.power }}算力
-                    </el-tag>
-                  </el-option>
-                </el-select>
-              </div>
+          <div class="param-line text-sm font-medium text-slate-700 dark:text-slate-300">请选择生成思维导图的AI模型</div>
+          <select
+            v-model="modelID"
+            class="w-full p-3 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:border-violet-500 outline-none"
+          >
+            <option v-for="item in models" :key="item.id" :value="item.id">
+              {{ item.name }} ({{ item.power }}算力)
+            </option>
+          </select>
 
-              <div class="text-info">
-                <el-text type="primary"
-                  >当前可用算力：<el-text type="warning">{{ loginUser.power }}</el-text></el-text
-                >
-              </div>
-
-              <div class="p-4">
-                <button
-                  class="w-full py-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-xl disabled:from-gray-400 disabled:to-gray-400 disabled:cursor-not-allowed hover:from-blue-600 hover:to-purple-700 transition-all duration-200 flex items-center justify-center space-x-2 text-base"
-                  type="button"
-                  @click="generateAI"
-                  :disabled="loading"
-                >
-                  <i v-if="loading" class="iconfont icon-loading animate-spin"></i>
-                  <i v-else class="iconfont icon-chuangzuo"></i>
-                  <span>生成思维导图</span>
-                </button>
-              </div>
-
-              <div class="param-line">使用已有内容生成？</div>
-              <div class="param-line">
-                <el-input
-                  v-model="content"
-                  :autosize="{ minRows: 4, maxRows: 6 }"
-                  type="textarea"
-                  placeholder="请用markdown语法输入您想要生成思维导图的内容！"
-                />
-              </div>
-
-              <div class="param-line">
-                <button
-                  class="w-full py-3 bg-gradient-to-r from-green-400 to-blue-500 text-white rounded-xl disabled:from-gray-400 disabled:to-gray-400 disabled:cursor-not-allowed hover:from-green-500 hover:to-blue-600 transition-all duration-200 flex items-center justify-center space-x-2 text-base"
-                  @click="generate"
-                  type="button"
-                >
-                  直接生成（免费）
-                </button>
-              </div>
-            </el-form>
+          <div class="text-sm text-slate-600 dark:text-slate-400">
+            当前可用算力：<span class="text-amber-500 font-medium">{{ loginUser.power }}</span>
           </div>
-        </div>
 
-        <div class="chat-box">
-          <!-- <div class="top-bar">
-            <el-button @click="downloadImage" type="primary">
-              <el-icon>
-                <Download />
-              </el-icon>
-              <span>下载图片-</span>
-            </el-button>
-          </div> -->
+          <button
+            class="w-full py-3 bg-gradient-to-r from-violet-500 to-violet-700 text-white rounded-xl disabled:from-slate-400 disabled:to-slate-400 disabled:cursor-not-allowed hover:from-violet-600 hover:to-violet-800 transition-all flex items-center justify-center gap-2"
+            @click="generateAI"
+            :disabled="loading"
+          >
+            <i v-if="loading" class="iconfont icon-loading animate-spin"></i>
+            <i v-else class="iconfont icon-chuangzuo"></i>
+            <span>生成思维导图</span>
+          </button>
 
-          <div class="body" id="markmap">
-            <svg ref="svgRef" :style="{ height: rightBoxHeight + 'px' }" />
-            <div id="toolbar">
-              <el-button @click="downloadImage" type="primary">
-                <el-icon>
-                  <Download />
-                </el-icon>
-                <span>下载图片</span>
-              </el-button>
-            </div>
-          </div>
+          <div class="param-line text-sm font-medium text-slate-700 dark:text-slate-300">使用已有内容生成？</div>
+          <textarea
+            v-model="content"
+            rows="4"
+            class="w-full p-3 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:border-violet-500 outline-none resize-none"
+            placeholder="请用markdown语法输入您想要生成思维导图的内容！"
+          />
+
+          <button
+            class="w-full py-3 bg-gradient-to-r from-green-400 to-blue-500 text-white rounded-xl hover:from-green-500 hover:to-blue-600 transition-all flex items-center justify-center gap-2"
+            @click="generate"
+          >
+            <i class="iconfont icon-chuangzuo"></i>
+            <span>直接生成（免费）</span>
+          </button>
         </div>
-        <!-- end task list box -->
+      </div>
+
+      <!-- Right Panel - Markmap View -->
+      <div class="chat-box flex-1 flex flex-col">
+        <div class="body flex-1 relative" id="markmap">
+          <svg ref="svgRef" class="w-full" :style="{ height: rightBoxHeight + 'px' }" />
+          <div id="toolbar" class="absolute top-2 right-2"></div>
+          <button
+            @click="downloadImage"
+            class="absolute bottom-4 right-4 px-4 py-2 bg-violet-600 hover:bg-violet-700 text-white rounded-lg flex items-center gap-2"
+          >
+            <i class="iconfont icon-download"></i>
+            <span>下载图片</span>
+          </button>
+        </div>
       </div>
     </div>
   </div>
@@ -111,15 +78,13 @@
 import { checkSession, getSystemInfo } from '@/store/cache'
 import { useSharedStore } from '@/store/sharedata'
 import { httpGet, httpPost } from '@/utils/http'
-import { Download } from '@element-plus/icons-vue'
-import { ElMessage } from 'element-plus'
+import { showMessageError } from '@/utils/dialog'
 import { Transformer } from 'markmap-lib'
 import { Toolbar } from 'markmap-toolbar'
 import { Markmap } from 'markmap-view'
 import { nextTick, onMounted, ref } from 'vue'
 
 const leftBoxHeight = ref(window.innerHeight - 105)
-//const rightBoxHeight = ref(window.innerHeight - 115);
 const rightBoxHeight = ref(window.innerHeight)
 
 const prompt = ref('')
@@ -171,7 +136,7 @@ const initData = () => {
       modelID.value = models.value[0].id
     })
     .catch((e) => {
-      ElMessage.error('获取模型失败：' + e.message)
+      showMessageError('获取模型失败：' + e.message)
     })
 
   checkSession()
@@ -224,7 +189,7 @@ const generateAI = () => {
   html.value = ''
   text.value = ''
   if (prompt.value === '') {
-    return ElMessage.error('请输入你的需求')
+    return showMessageError('请输入你的需求')
   }
   if (!isLogin.value) {
     store.setShowLoginDialog(true)
@@ -242,11 +207,10 @@ const generateAI = () => {
       loginUser.value.power -= model.power
       nextTick(() => update())
       loading.value = false
-      // 缓存结果
       localStorage.setItem(cacheKey.value, text.value)
     })
     .catch((e) => {
-      ElMessage.error('生成思维导图失败：' + e.message)
+      showMessageError('生成思维导图失败：' + e.message)
       loading.value = false
     })
 }
@@ -261,7 +225,6 @@ const getModelById = (modelId) => {
 
 // download SVG to png file
 const downloadImage = async () => {
-  // 先自适应思维导图到可视化区域
   await markMap.value.fit()
 
   const svgElement = document.getElementById('markmap')
@@ -271,7 +234,6 @@ const downloadImage = async () => {
   const image = new Image()
   image.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(source)
 
-  // 分辨率倍数，越高图片越清晰，但文件越大
   const scale = 4
   const canvas = document.createElement('canvas')
   canvas.width = svgElement.offsetWidth * scale
@@ -283,7 +245,6 @@ const downloadImage = async () => {
   context.fillRect(0, 0, canvas.width, canvas.height)
 
   image.onload = function () {
-    // 关键：缩放 context
     context.setTransform(scale, 0, 0, scale, 0, 0)
     context.drawImage(image, 0, 0)
     const a = document.createElement('a')
@@ -294,7 +255,8 @@ const downloadImage = async () => {
 }
 </script>
 
-<style lang="scss">
-@use '../assets/css/mark-map.scss' as *;
-@use '../assets/css/custom-scroll.scss' as *;
+<style scoped>
+.page-mark-map {
+  min-height: 100vh;
+}
 </style>

@@ -1,14 +1,14 @@
 <template>
   <div>
-    <div class="bg"></div>
+    <div class="bg dark:bg-slate-900"></div>
     <div class="admin-login">
       <div class="main">
-        <div class="contain">
+        <div class="contain dark:bg-slate-800/90 dark:border dark:border-slate-700">
           <div class="logo" @click="router.push('/')">
             <el-image :src="logo" fit="cover" />
           </div>
 
-          <h1 class="header">登录 {{ title }}</h1>
+          <h1 class="header dark:text-white">登录 {{ title }}</h1>
           <div class="content">
             <el-input
               v-model="username"
@@ -202,6 +202,33 @@ const doLogin = function (verifyData) {
 
         .el-input {
           margin: 10px 0;
+
+          :deep(.el-input__wrapper) {
+            background-color: rgba(255, 255, 255, 0.9);
+            border: 1px solid #dcdfe6;
+            transition: all 0.3s;
+
+            .dark & {
+              background-color: rgba(30, 41, 59, 0.9);
+              border-color: #475569;
+            }
+          }
+
+          :deep(.el-input__inner) {
+            color: #303133;
+
+            .dark & {
+              color: #f1f5f9;
+            }
+          }
+
+          :deep(.el-input__prefix) {
+            color: #909399;
+
+            .dark & {
+              color: #94a3b8;
+            }
+          }
         }
 
         .block {
@@ -237,6 +264,9 @@ const doLogin = function (verifyData) {
 
     .foot-container {
       background: rgba(0, 0, 0, 0.3);
+      .dark & {
+        background: rgba(15, 23, 42, 0.5);
+      }
       --text-color: #ffffff;
     }
   }

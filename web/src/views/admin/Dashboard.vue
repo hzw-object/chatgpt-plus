@@ -211,7 +211,7 @@ import {
 } from '@element-plus/icons-vue'
 import * as echarts from 'echarts'
 import { ElMessage } from 'element-plus'
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, computed, watch } from 'vue'
 
 const stats = ref({
   users: 0,
@@ -235,6 +235,31 @@ const stats = ref({
   todayMusicJobs: 0,
 })
 const loading = ref(true)
+const isDark = ref(document.documentElement.classList.contains('dark'))
+
+// Chart color computed properties
+const chartColors = computed(() => ({
+  tooltipBg: isDark.value ? 'rgba(30, 30, 30, 0.9)' : 'rgba(255, 255, 255, 0.9)',
+  border: isDark.value ? '#4b5563' : '#ddd',
+  text: isDark.value ? '#94a3b8' : '#666',
+  axisLine: isDark.value ? '#4b5563' : '#ddd',
+  axisLabel: isDark.value ? '#94a3b8' : '#999',
+  splitLine: isDark.value ? '#374151' : '#f0f0f0',
+  violet: '#8B5CF6',
+  violetAreaStart: isDark.value ? 'rgba(139, 92, 246, 0.4)' : 'rgba(139, 92, 246, 0.3)',
+  violetAreaEnd: isDark.value ? 'rgba(139, 92, 246, 0.1)' : 'rgba(139, 92, 246, 0.05)',
+  emerald: '#10B981',
+  emeraldAreaStart: isDark.value ? 'rgba(16, 185, 129, 0.4)' : 'rgba(16, 185, 129, 0.3)',
+  emeraldAreaEnd: isDark.value ? 'rgba(16, 185, 129, 0.1)' : 'rgba(16, 185, 129, 0.05)',
+}))
+
+// Watch for dark mode changes
+watch(
+  () => document.documentElement.classList.contains('dark'),
+  (dark) => {
+    isDark.value = dark
+  }
+)
 
 // 数据列表
 const recentOrders = ref([])
@@ -294,12 +319,13 @@ onMounted(() => {
         x.push(k)
         dataUsers.push(chartData.users[k])
       }
+      const c = chartColors.value
       chartUsers.setOption({
         tooltip: {
           trigger: 'axis',
-          backgroundColor: 'rgba(255, 255, 255, 0.9)',
-          borderColor: '#ddd',
-          textStyle: { color: '#666' },
+          backgroundColor: c.tooltipBg,
+          borderColor: c.border,
+          textStyle: { color: c.text },
         },
         grid: {
           left: '3%',
@@ -310,16 +336,16 @@ onMounted(() => {
         xAxis: {
           type: 'category',
           data: x,
-          axisLine: { lineStyle: { color: '#ddd' } },
+          axisLine: { lineStyle: { color: c.axisLine } },
           axisTick: { show: false },
-          axisLabel: { color: '#999' },
+          axisLabel: { color: c.axisLabel },
         },
         yAxis: {
           type: 'value',
           axisLine: { show: false },
           axisTick: { show: false },
-          axisLabel: { color: '#999' },
-          splitLine: { lineStyle: { color: '#f0f0f0' } },
+          axisLabel: { color: c.axisLabel },
+          splitLine: { lineStyle: { color: c.splitLine } },
         },
         series: [
           {
@@ -329,11 +355,11 @@ onMounted(() => {
             symbol: 'circle',
             symbolSize: 6,
             lineStyle: {
-              color: '#8B5CF6',
+              color: c.violet,
               width: 3,
             },
             itemStyle: {
-              color: '#8B5CF6',
+              color: c.violet,
             },
             areaStyle: {
               color: {
@@ -345,11 +371,11 @@ onMounted(() => {
                 colorStops: [
                   {
                     offset: 0,
-                    color: 'rgba(139, 92, 246, 0.3)',
+                    color: c.violetAreaStart,
                   },
                   {
                     offset: 1,
-                    color: 'rgba(139, 92, 246, 0.05)',
+                    color: c.violetAreaEnd,
                   },
                 ],
               },
@@ -365,9 +391,9 @@ onMounted(() => {
       chartIncome.setOption({
         tooltip: {
           trigger: 'axis',
-          backgroundColor: 'rgba(255, 255, 255, 0.9)',
-          borderColor: '#ddd',
-          textStyle: { color: '#666' },
+          backgroundColor: c.tooltipBg,
+          borderColor: c.border,
+          textStyle: { color: c.text },
         },
         grid: {
           left: '3%',
@@ -378,16 +404,16 @@ onMounted(() => {
         xAxis: {
           type: 'category',
           data: x,
-          axisLine: { lineStyle: { color: '#ddd' } },
+          axisLine: { lineStyle: { color: c.axisLine } },
           axisTick: { show: false },
-          axisLabel: { color: '#999' },
+          axisLabel: { color: c.axisLabel },
         },
         yAxis: {
           type: 'value',
           axisLine: { show: false },
           axisTick: { show: false },
-          axisLabel: { color: '#999' },
-          splitLine: { lineStyle: { color: '#f0f0f0' } },
+          axisLabel: { color: c.axisLabel },
+          splitLine: { lineStyle: { color: c.splitLine } },
         },
         series: [
           {
@@ -397,11 +423,11 @@ onMounted(() => {
             symbol: 'circle',
             symbolSize: 6,
             lineStyle: {
-              color: '#10B981',
+              color: c.emerald,
               width: 3,
             },
             itemStyle: {
-              color: '#10B981',
+              color: c.emerald,
             },
             areaStyle: {
               color: {
@@ -413,11 +439,11 @@ onMounted(() => {
                 colorStops: [
                   {
                     offset: 0,
-                    color: 'rgba(16, 185, 129, 0.3)',
+                    color: c.emeraldAreaStart,
                   },
                   {
                     offset: 1,
-                    color: 'rgba(16, 185, 129, 0.05)',
+                    color: c.emeraldAreaEnd,
                   },
                 ],
               },
@@ -488,34 +514,42 @@ onMounted(() => {
 
     &.user-icon {
       background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      @apply dark:bg-gradient-to-br dark:from-violet-600 dark:to-purple-700;
     }
 
     &.chat-icon {
       background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+      @apply dark:bg-gradient-to-br dark:from-pink-500 dark:to-rose-500;
     }
 
     &.token-icon {
       background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      @apply dark:bg-gradient-to-br dark:from-violet-600 dark:to-purple-700;
     }
 
     &.income-icon {
       background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+      @apply dark:bg-gradient-to-br dark:from-emerald-500 dark:to-teal-400;
     }
 
     &.order-icon {
       background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+      @apply dark:bg-gradient-to-br dark:from-pink-500 dark:to-amber-400;
     }
 
     &.image-icon {
       background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      @apply dark:bg-gradient-to-br dark:from-violet-600 dark:to-purple-700;
     }
 
     &.video-icon {
       background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+      @apply dark:bg-gradient-to-br dark:from-pink-500 dark:to-amber-400;
     }
 
     &.music-icon {
       background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+      @apply dark:bg-gradient-to-br dark:from-cyan-400 dark:to-pink-300;
     }
   }
 

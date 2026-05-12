@@ -1,8 +1,8 @@
 <template>
-  <div class="chat-export" v-loading="loading">
-    <div class="chat-box" id="chat-box">
-      <div class="title pt-4">
-        <h2>{{ chatTitle }}</h2>
+  <div class="chat-export dark:bg-gray-900" v-loading="loading">
+    <div class="chat-box dark:bg-gray-900" id="chat-box">
+      <div class="title pt-4 dark:text-white">
+        <h2 class="dark:text-white">{{ chatTitle }}</h2>
       </div>
 
       <div v-for="item in chatData" :key="item.id">
@@ -109,17 +109,25 @@ onMounted(() => {
 
     .title {
       text-align: center;
+      color: #374151;
     }
 
     .chat-line {
       font-size: 14px;
       display: flex;
       align-items: center;
+      color: #374151;
 
       .chat-line-inner {
         max-width: 800px;
       }
     }
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  .chat-export {
+    --content-color: #e5e7eb;
   }
 }
 

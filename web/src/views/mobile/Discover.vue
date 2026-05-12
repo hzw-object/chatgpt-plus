@@ -152,9 +152,25 @@ const navigateTo = (url) => {
 </script>
 
 <style lang="scss" scoped>
+// CSS custom properties for dark mode gradients
 .discover-page {
   min-height: 100vh;
   background: var(--van-background);
+  --gradient-primary: linear-gradient(135deg, var(--van-primary-color), #8b5cf6);
+  --gradient-badge: linear-gradient(135deg, #ef4444, #dc2626);
+  --gradient-border: linear-gradient(90deg, var(--van-primary-color), #8b5cf6);
+  --color-status-active: #10b981;
+  --color-status-beta: #f59e0b;
+  --color-status-maintenance: #6b7280;
+
+  :deep(.van-theme-dark) {
+    --gradient-primary: linear-gradient(135deg, var(--van-primary-color), #7c3aed);
+    --gradient-badge: linear-gradient(135deg, #b91c1c, #991b1b);
+    --gradient-border: linear-gradient(90deg, var(--van-primary-color), #7c3aed);
+    --color-status-active: #059669;
+    --color-status-beta: #d97706;
+    --color-status-maintenance: #4b5563;
+  }
 
   .discover-content {
     padding: 20px 16px;
@@ -169,7 +185,7 @@ const navigateTo = (url) => {
           font-weight: 700;
           color: var(--van-text-color);
           margin: 0 0 8px 0;
-          background: linear-gradient(135deg, var(--van-primary-color), #8b5cf6);
+          background: var(--gradient-primary);
           -webkit-background-clip: text;
           -webkit-text-fill-color: transparent;
           background-clip: text;
@@ -205,7 +221,7 @@ const navigateTo = (url) => {
               left: 0;
               right: 0;
               height: 3px;
-              background: linear-gradient(90deg, var(--van-primary-color), #8b5cf6);
+              background: var(--gradient-border);
               transform: scaleX(0);
               transition: transform 0.3s ease;
             }
@@ -252,7 +268,7 @@ const navigateTo = (url) => {
                 position: absolute;
                 top: -8px;
                 right: -8px;
-                background: linear-gradient(135deg, #ef4444, #dc2626);
+                background: var(--gradient-badge);
                 color: white;
                 font-size: 10px;
                 font-weight: 600;
@@ -302,17 +318,17 @@ const navigateTo = (url) => {
                   border-radius: 10px;
 
                   &.active {
-                    background: #10b981;
+                    background: var(--color-status-active);
                     color: white;
                   }
 
                   &.beta {
-                    background: #f59e0b;
+                    background: var(--color-status-beta);
                     color: white;
                   }
 
                   &.maintenance {
-                    background: #6b7280;
+                    background: var(--color-status-maintenance);
                     color: white;
                   }
                 }

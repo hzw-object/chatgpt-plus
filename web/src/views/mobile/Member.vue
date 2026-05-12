@@ -31,11 +31,11 @@
 
               <div class="payment-methods">
                 <div class="methods-grid">
-                  <button class="payment-btn wechat-btn" @click="wxPay(item)">
+                  <button class="payment-btn wechat-btn dark:bg-emerald-600 dark:hover:bg-emerald-500" @click="wxPay(item)">
                     <i class="iconfont icon-wechat-pay"></i>
                     <span>微信支付</span>
                   </button>
-                  <button class="payment-btn alipay-btn" @click="alipay(item)">
+                  <button class="payment-btn alipay-btn dark:bg-blue-500 dark:hover:bg-blue-600" @click="alipay(item)">
                     <i class="iconfont icon-alipay"></i>
                     <span>支付宝</span>
                   </button>
@@ -404,6 +404,12 @@ onUnmounted(() => {
                 color: #ff6b35;
                 font-size: 18px;
               }
+
+              @media (prefers-color-scheme: dark) {
+                .discount-price .price {
+                  color: #fb923c;
+                }
+              }
             }
 
             .product-details {
@@ -469,6 +475,13 @@ onUnmounted(() => {
                     &:hover {
                       background: #06ad56;
                     }
+
+                    @media (prefers-color-scheme: dark) {
+                      background: #059669;
+                      &:hover {
+                        background: #10b981;
+                      }
+                    }
                   }
 
                   &.alipay-btn {
@@ -477,6 +490,13 @@ onUnmounted(() => {
 
                     &:hover {
                       background: #1395d1;
+                    }
+
+                    @media (prefers-color-scheme: dark) {
+                      background: #2563eb;
+                      &:hover {
+                        background: #1d4ed8;
+                      }
                     }
                   }
                 }
@@ -516,6 +536,10 @@ onUnmounted(() => {
         background: #f8f9fa;
         border-radius: 12px;
         display: inline-block;
+
+        @media (prefers-color-scheme: dark) {
+          background: #374151;
+        }
       }
 
       .pay-amount {
@@ -523,6 +547,10 @@ onUnmounted(() => {
         font-weight: 600;
         color: #ff6b35;
         margin-bottom: 16px;
+
+        @media (prefers-color-scheme: dark) {
+          color: #fb923c;
+        }
       }
 
       .pay-status {
@@ -536,12 +564,21 @@ onUnmounted(() => {
         border-radius: 8px;
         border: 1px solid #e0f2fe;
 
+        @media (prefers-color-scheme: dark) {
+          background: #1e3a5f;
+          border-color: #1e40af;
+        }
+
         .success-status {
           display: flex;
           align-items: center;
           gap: 8px;
           color: #07c160;
           font-weight: 500;
+
+          @media (prefers-color-scheme: dark) {
+            color: #10b981;
+          }
         }
       }
     }

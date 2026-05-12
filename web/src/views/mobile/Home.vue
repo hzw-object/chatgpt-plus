@@ -1,6 +1,6 @@
 <template>
   <van-config-provider :theme="theme">
-    <div class="mobile-home">
+    <div class="mobile-home dark:bg-gray-900">
       <div class="page-content">
         <router-view :key="routerViewKey" v-slot="{ Component }">
           <transition name="move" mode="out-in">
@@ -87,24 +87,32 @@ onMounted(() => {
 @use '../../assets/iconfont/iconfont.css' as *;
 
 .mobile-home {
+  @apply dark:bg-gray-900;
+
   .page-content {
     padding-bottom: 60px;
+    @apply dark:bg-gray-900;
   }
 
   .van-tabbar {
     box-shadow: 0 -2px 20px rgba(0, 0, 0, 0.1);
+    @apply dark:bg-gray-800 dark:shadow-none;
 
     .van-tabbar-item {
+      @apply dark:text-gray-400;
+
       .active-icon {
         color: var(--van-primary-color) !important;
         transform: scale(1.1);
         transition: all 0.3s ease;
+        @apply dark:!text-white;
       }
 
       &--active {
         .van-tabbar-item__text {
           color: var(--van-primary-color);
           font-weight: 600;
+          @apply dark:text-white;
         }
       }
     }
@@ -112,6 +120,7 @@ onMounted(() => {
     .iconfont {
       font-size: 20px;
       transition: all 0.3s ease;
+      @apply dark:text-gray-400;
     }
   }
 }
@@ -119,6 +128,10 @@ onMounted(() => {
 // 黑色主题
 .van-theme-dark body {
   background: #1c1c1e;
+}
+
+html.dark .mobile-home {
+  background-color: #1c1c1e;
 }
 
 // 路由切换动画

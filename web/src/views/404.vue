@@ -1,8 +1,8 @@
 <template>
-  <div class="page-404" :style="{ height: winHeight + 'px' }">
+  <div class="page-404 bg-white dark:bg-slate-900" :style="{ height: winHeight + 'px' }">
     <div class="inner">
-      <h1>404</h1>
-      <h2>饶了地球一圈，还是没有找到您要的页面</h2>
+      <h1 class="text-gray-900 dark:text-slate-200">404</h1>
+      <h2 class="text-gray-500 dark:text-white">饶了地球一圈，还是没有找到您要的页面</h2>
     </div>
   </div>
 </template>
@@ -17,13 +17,11 @@ const winHeight = ref(window.innerHeight)
 .page-404 {
   display: flex;
   justify-content: center;
-  background-color: #282c34;
 
   .inner {
     text-align: center;
 
     h1 {
-      color: #202020;
       font-size: 120px;
       font-weight: bold;
       letter-spacing: 0.1em;
@@ -31,7 +29,6 @@ const winHeight = ref(window.innerHeight)
     }
 
     h2 {
-      color: #ffffff;
       font-weight: bold;
     }
   }

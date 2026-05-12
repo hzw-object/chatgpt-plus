@@ -1,5 +1,5 @@
 <template>
-  <div class="settings container p-5">
+  <div class="settings container p-5 dark:bg-slate-900">
     <el-tabs v-model="activeTab" type="border-card">
       <el-tab-pane label="本地" name="local">
         <el-form :model="local" label-position="top">
@@ -38,7 +38,7 @@
       </el-tab-pane>
 
       <el-tab-pane label="MinIO" name="minio">
-        <div class="rounded-md bg-blue-100 p-3 text-gray-500 border-blue-500 border-2 text-base">
+        <div class="rounded-md bg-violet-50 dark:bg-slate-800 p-3 text-slate-600 dark:text-slate-300 border-violet-500 dark:border-slate-600 border-2 text-base">
           如果你不知道怎么获取这些配置信息，请参考文档：
           <a
             href="https://docs.geekai.me/plus/config/oss.html#%E6%90%AD%E5%BB%BA-minio-%E5%AD%98%E5%82%A8%E6%9C%8D%E5%8A%A1"
@@ -59,7 +59,7 @@
       </el-tab-pane>
 
       <el-tab-pane label="七牛云" name="qiniu">
-        <div class="rounded-md bg-blue-100 p-3 text-gray-500 border-blue-500 border-2 text-base">
+        <div class="rounded-md bg-violet-50 dark:bg-slate-800 p-3 text-slate-600 dark:text-slate-300 border-violet-500 dark:border-slate-600 border-2 text-base">
           如果你不知道怎么获取这些配置信息，请参考文档：
           <a
             href="https://docs.geekai.me/plus/config/oss.html#%E4%B8%83%E7%89%9B%E4%BA%91-oss-%E9%85%8D%E7%BD%AE"
@@ -108,8 +108,8 @@
       </el-tab-pane>
     </el-tabs>
 
-    <div class="mt-3">
-      <label class="form-label mr-2">存储引擎</label>
+    <div class="mt-3 dark:bg-slate-900">
+      <label class="form-label mr-2 text-gray-700 dark:text-slate-200">存储引擎</label>
       <el-radio-group v-model="active" size="large">
         <el-radio value="local" border>本地存储</el-radio>
         <el-radio value="aliyun" border>阿里云</el-radio>
@@ -190,7 +190,7 @@ const save = () => {
 <style lang="scss">
 .settings {
   a {
-    color: #409eff;
+    color: var(--el-color-primary);
     &:hover {
       text-decoration: underline;
     }

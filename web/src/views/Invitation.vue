@@ -1,90 +1,65 @@
 <template>
-  <div class="custom-scroll">
-    <div class="page-invitation">
-      <div class="inner">
-        <h2 class="text-2xl p-4 font-bold">会员推广计划</h2>
-        <div class="share-box">
-          <div class="info">
-            我们非常欢迎您把此应用分享给您身边的朋友，分享成功注册后您和被邀请人都将获得
-            <strong>{{ invitePower }}</strong>
-            算力额度作为奖励。
-            你可以保存下面的二维码或者直接复制分享您的专属推广链接发送给微信好友。
-          </div>
+  <div class="page-invitation p-4">
+    <div class="max-w-4xl mx-auto">
+      <h2 class="text-2xl p-4 font-bold text-center text-slate-900 dark:text-slate-100">会员推广计划</h2>
 
-          <div class="invite-qrcode">
-            <el-image :src="qrImg" />
-          </div>
+      <div class="share-box bg-slate-100 dark:bg-slate-800 rounded-xl p-6 mb-6">
+        <div class="info text-slate-700 dark:text-slate-300 leading-relaxed mb-6">
+          我们非常欢迎您把此应用分享给您身边的朋友，分享成功注册后您和被邀请人都将获得
+          <strong class="text-red-500">{{ invitePower }}</strong>
+          算力额度作为奖励。你可以保存下面的二维码或者直接复制分享您的专属推广链接发送给微信好友。
+        </div>
 
-          <div class="invite-url">
-            <span>{{ inviteURL }}</span>
-            <el-button type="primary" plain class="copy-link" :data-clipboard-text="inviteURL"
-              >复制链接</el-button
-            >
+        <div class="invite-qrcode text-center py-6">
+          <img :src="qrImg" class="inline-block w-64 h-64 rounded-lg" alt="邀请二维码" />
+        </div>
+
+        <div class="invite-url flex items-center justify-between gap-4 p-4 border border-slate-300 dark:border-slate-600 rounded-xl">
+          <span class="text-sm text-slate-600 dark:text-slate-400 truncate">{{ inviteURL }}</span>
+          <button
+            class="px-4 py-2 bg-violet-600 hover:bg-violet-700 text-white rounded-lg whitespace-nowrap copy-link"
+            :data-clipboard-text="inviteURL"
+          >
+            复制链接
+          </button>
+        </div>
+      </div>
+
+      <div class="invite-stats grid grid-cols-3 gap-4 mb-6">
+        <div class="item-box yellow rounded-xl p-4 h-32 flex items-center justify-center">
+          <div class="flex items-center gap-4">
+            <i class="iconfont icon-role text-6xl"></i>
+            <div class="text-center">
+              <div class="num text-4xl font-bold">{{ hits }}</div>
+              <div class="text text-sm">点击量</div>
+            </div>
           </div>
         </div>
 
-        <div class="invite-stats">
-          <el-row :gutter="20">
-            <el-col :span="8">
-              <div class="item-box yellow">
-                <el-row :gutter="10">
-                  <el-col :span="10">
-                    <div class="item-icon">
-                      <i class="iconfont icon-role"></i>
-                    </div>
-                  </el-col>
-                  <el-col :span="14">
-                    <div class="item-info">
-                      <div class="num">{{ hits }}</div>
-                      <div class="text">点击量</div>
-                    </div>
-                  </el-col>
-                </el-row>
-              </div>
-            </el-col>
-            <el-col :span="8">
-              <div class="item-box blue">
-                <el-row :gutter="10">
-                  <el-col :span="10">
-                    <div class="item-icon">
-                      <i class="iconfont icon-order"></i>
-                    </div>
-                  </el-col>
-                  <el-col :span="14">
-                    <div class="item-info">
-                      <div class="num">{{ regNum }}</div>
-                      <div class="text">注册量</div>
-                    </div>
-                  </el-col>
-                </el-row>
-              </div>
-            </el-col>
-            <el-col :span="8">
-              <div class="item-box bg-green-500">
-                <el-row :gutter="10">
-                  <el-col :span="10">
-                    <div class="item-icon">
-                      <i class="iconfont icon-chart"></i>
-                    </div>
-                  </el-col>
-                  <el-col :span="14">
-                    <div class="item-info">
-                      <div class="num">{{ rate }}%</div>
-                      <div class="text">转化率</div>
-                    </div>
-                  </el-col>
-                </el-row>
-              </div>
-            </el-col>
-          </el-row>
-        </div>
-        <div class="box-card">
-          <h2 class="text-xl pb-4">您推荐的用户</h2>
-
-          <div class="invite-logs">
-            <invite-list v-if="isLogin" />
+        <div class="item-box blue rounded-xl p-4 h-32 flex items-center justify-center">
+          <div class="flex items-center gap-4">
+            <i class="iconfont icon-order text-6xl"></i>
+            <div class="text-center">
+              <div class="num text-4xl font-bold">{{ regNum }}</div>
+              <div class="text text-sm">注册量</div>
+            </div>
           </div>
         </div>
+
+        <div class="item-box bg-green-500 rounded-xl p-4 h-32 flex items-center justify-center text-white">
+          <div class="flex items-center gap-4">
+            <i class="iconfont icon-chart text-6xl"></i>
+            <div class="text-center">
+              <div class="num text-4xl font-bold">{{ rate }}%</div>
+              <div class="text text-sm">转化率</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="box-card">
+        <h2 class="text-xl pb-4 text-slate-900 dark:text-slate-100">您推荐的用户</h2>
+        <invite-list v-if="isLogin" />
       </div>
     </div>
   </div>
@@ -95,9 +70,8 @@ import InviteList from '@/components/InviteList.vue'
 import { checkSession, getSystemInfo } from '@/store/cache'
 import { useSharedStore } from '@/store/sharedata'
 import { httpGet } from '@/utils/http'
-import Clipboard from 'clipboard'
-import { ElMessage } from 'element-plus'
-import QRCode from 'qrcode'
+import { showMessageError, showMessageSuccess } from '@/utils/dialog'
+import Clipboard from 'qrcode'
 import { onMounted, ref } from 'vue'
 
 const inviteURL = ref('')
@@ -111,16 +85,6 @@ const store = useSharedStore()
 
 onMounted(() => {
   initData()
-
-  // 复制链接
-  const clipboard = new Clipboard('.copy-link')
-  clipboard.on('success', () => {
-    ElMessage.success('复制成功！')
-  })
-
-  clipboard.on('error', () => {
-    ElMessage.error('复制失败！')
-  })
 })
 
 const initData = () => {
@@ -135,17 +99,17 @@ const initData = () => {
           if (hits.value > 0) {
             rate.value = ((regNum.value / hits.value) * 100).toFixed(2)
           }
-          QRCode.toDataURL(text, { width: 400, height: 400, margin: 2 }, (error, url) => {
-            if (error) {
-              console.error(error)
-            } else {
-              qrImg.value = url
-            }
+          import('qrcode').then(({ default: QRCode }) => {
+            QRCode.toDataURL(text, { width: 400, height: 400, margin: 2 }, (error, url) => {
+              if (!error) {
+                qrImg.value = url
+              }
+            })
           })
           inviteURL.value = text
         })
         .catch((e) => {
-          ElMessage.error('获取邀请码失败：' + e.message)
+          showMessageError('获取邀请码失败：' + e.message)
         })
 
       getSystemInfo()
@@ -153,114 +117,48 @@ const initData = () => {
           invitePower.value = res.data['invite_power']
         })
         .catch((e) => {
-          ElMessage.error('获取系统配置失败：' + e.message)
+          showMessageError('获取系统配置失败：' + e.message)
         })
     })
     .catch(() => {
       store.setShowLoginDialog(true)
     })
 }
+
+// 复制链接
+onMounted(() => {
+  const clipboard = new Clipboard('.copy-link')
+  clipboard.on('success', () => {
+    showMessageSuccess('复制成功！')
+  })
+  clipboard.on('error', () => {
+    showMessageError('复制失败！')
+  })
+})
 </script>
 
-<style lang="scss" scoped>
-@use '../assets/css/custom-scroll.scss' as *;
-
+<style scoped>
 .page-invitation {
-  display: flex;
-  justify-content: center;
-  // background-color: #282c34;
-  height: 100%;
-  overflow-x: hidden;
-  overflow-y: visible;
+  min-height: 100vh;
+}
 
-  .inner {
-    display: flex;
-    flex-flow: column;
-    max-width: 1000px;
-    width: 100%;
-    color: var(--text-theme-color);
+.yellow {
+  background-color: #ffeecc;
+  color: #d68f00;
+}
 
-    h2 {
-      color: var(--theme-textcolor-normal);
-      text-align: center;
-    }
+.dark .yellow {
+  background-color: #78350f;
+  color: #fcd34d;
+}
 
-    .share-box {
-      .info {
-        line-height: 1.5;
-        // border 1px solid #444444
-        background: var(--chat-bg);
-        border-radius: 10px;
-        padding: 10px;
+.blue {
+  background-color: #d6e4ff;
+  color: #1062fe;
+}
 
-        strong {
-          color: #f56c6c;
-        }
-      }
-
-      .invite-qrcode {
-        padding: 20px;
-        text-align: center;
-      }
-
-      .invite-url {
-        padding: 15px;
-        display: flex;
-        justify-content: space-between;
-        border: 1px solid #444444;
-        border-radius: 10px;
-
-        span {
-          position: relative;
-          font-family: 'Microsoft YaHei', '微软雅黑', Arial, sans-serif;
-          top: 5px;
-        }
-      }
-    }
-
-    .invite-stats {
-      padding: 30px 10px;
-
-      .item-box {
-        border-radius: 10px;
-        padding: 0 10px;
-
-        .el-col {
-          height: 140px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-
-          .iconfont {
-            font-size: 60px;
-          }
-
-          .item-info {
-            font-size: 18px;
-
-            .text,
-            .num {
-              padding: 3px 0;
-              text-align: center;
-            }
-
-            .num {
-              font-size: 40px;
-            }
-          }
-        }
-      }
-
-      .yellow {
-        background-color: #ffeecc;
-        color: #d68f00;
-      }
-
-      .blue {
-        background-color: #d6e4ff;
-        color: #1062fe;
-      }
-    }
-  }
+.dark .blue {
+  background-color: #1e3a8a;
+  color: #93c5fd;
 }
 </style>

@@ -1,6 +1,6 @@
 <template>
-  <div class="license-config form p-5" v-loading="loading">
-    <div class="container">
+  <div class="license-config form p-5 dark:bg-slate-900" v-loading="loading">
+    <div class="container dark:bg-slate-800">
       <el-descriptions
         v-if="license.is_active"
         class="margin-top"
@@ -45,9 +45,9 @@
         </el-descriptions-item>
       </el-descriptions>
 
-      <div class="mt-5 p-5 border border-gray-200 rounded-md bg-gray-50">
-        <h3>激活后可获得以下权限：</h3>
-        <div class="py-3 text-gray-500 leading-relaxed">
+      <div class="mt-5 p-5 border border-gray-200 rounded-md bg-gray-50 dark:bg-slate-700 dark:border-slate-600">
+        <h3 class="dark:text-white">激活后可获得以下权限：</h3>
+        <div class="py-3 text-gray-500 dark:text-gray-300 leading-relaxed">
           <p>1、使用任意第三方中转 API KEY，而不用局限于 GeekAI 推荐的白名单列表</p>
           <p>2、可以在相关页面去除 GeekAI 的版权信息，或者修改为自己的版权信息</p>
         </div>
@@ -139,8 +139,16 @@ const copy = (text) => {
   color: #67c23a;
 }
 
+.selected.dark {
+  color: #6ade6a;
+}
+
 .closed {
   color: #f56c6c;
+}
+
+.closed.dark {
+  color: #f99090;
 }
 
 .text {

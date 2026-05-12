@@ -363,4 +363,32 @@ const testModeration = async () => {
     }
   }
 }
+
+// Dark mode overrides using Tailwind dark: classes
+:deep(.dark) {
+  .settings {
+    a {
+      color: #60a9ff;
+    }
+  }
+
+  .test-result {
+    .result-table {
+      .el-table__header {
+        background-color: #1e293b;
+
+        th {
+          background-color: #1e293b;
+          color: #cbd5e1;
+        }
+      }
+
+      .el-table__row {
+        &:hover {
+          background-color: #1e293b;
+        }
+      }
+    }
+  }
+}
 </style>

@@ -13,7 +13,7 @@
       <el-col :span="4">
         <el-card class="stat-card">
           <div class="stat-item">
-            <div class="stat-number !text-blue-500">{{ stats.pendingTasks }}</div>
+            <div class="stat-number !text-violet-500">{{ stats.pendingTasks }}</div>
             <div class="stat-label">排队中</div>
           </div>
         </el-card>
@@ -444,12 +444,14 @@ onMounted(() => {
   h2 {
     margin: 0 0 8px 0;
     color: #303133;
+    @apply dark:text-gray-200;
   }
 
   p {
     margin: 0;
     color: #606266;
     font-size: 14px;
+    @apply dark:text-gray-400;
   }
 }
 
@@ -474,20 +476,26 @@ onMounted(() => {
 
       &.success {
         color: #67c23a;
+        @apply dark:text-green-400;
       }
 
       &.warning {
         color: #e6a23c;
+        @apply dark:text-yellow-400;
       }
 
       &.danger {
         color: #f56c6c;
+        @apply dark:text-red-400;
       }
+
+      @apply dark:text-gray-200;
     }
 
     .stat-label {
       font-size: 14px;
       color: #909399;
+      @apply dark:text-gray-500;
     }
   }
 }
@@ -508,6 +516,7 @@ onMounted(() => {
       margin: 0 0 10px 0;
       color: #303133;
       font-size: 16px;
+      @apply dark:text-gray-200;
     }
 
     .prompt-content {
@@ -516,6 +525,7 @@ onMounted(() => {
       border-radius: 4px;
       color: #606266;
       line-height: 1.6;
+      @apply dark:bg-slate-800 dark:text-gray-400;
     }
 
     .params-content,
@@ -534,6 +544,7 @@ onMounted(() => {
           font-weight: bold;
           color: #303133;
           min-width: 50px;
+          @apply dark:text-gray-300;
         }
       }
     }

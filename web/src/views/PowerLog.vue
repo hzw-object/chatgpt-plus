@@ -1,101 +1,118 @@
 <template>
-  <div class="power-log custom-scroll" v-loading="loading">
-    <!-- :style="{ height: listBoxHeight + 'px' }" -->
+  <div class="power-log custom-scroll p-4">
     <div class="inner">
-      <div class="list-box">
-        <div class="handle-box">
-          <el-input
+      <div class="list-box bg-slate-800/50 rounded-xl p-5">
+        <div class="handle-box flex flex-wrap gap-3 mb-4">
+          <input
             v-model="query.model"
             placeholder="模型"
-            class="handle-input mr10"
-            clearable
-          ></el-input>
-          <el-date-picker
-            v-model="query.date"
-            type="daterange"
-            start-placeholder="开始日期"
-            end-placeholder="结束日期"
-            format="YYYY-MM-DD"
-            value-format="YYYY-MM-DD"
-            style="margin: 0 10px; width: 200px"
+            class="px-3 py-2 rounded-lg bg-slate-700 text-white border border-slate-600 focus:border-violet-500 outline-none"
           />
-          <el-button type="primary" :icon="Search" @click="fetchData">搜索</el-button>
+          <input
+            v-model="query.startDate"
+            type="date"
+            class="px-3 py-2 rounded-lg bg-slate-700 text-white border border-slate-600 focus:border-violet-500 outline-none"
+          />
+          <input
+            v-model="query.endDate"
+            type="date"
+            class="px-3 py-2 rounded-lg bg-slate-700 text-white border border-slate-600 focus:border-violet-500 outline-none"
+          />
+          <button
+            @click="fetchData"
+            class="px-4 py-2 bg-violet-600 hover:bg-violet-700 text-white rounded-lg flex items-center gap-2"
+          >
+            <i class="iconfont icon-search"></i> 搜索
+          </button>
         </div>
 
-        <el-row v-if="items.length > 0">
-          <el-table :data="items" :row-key="(row) => row.id" table-layout="auto" border>
-            <el-table-column prop="username" label="用户" width="130px" />
-            <el-table-column prop="model" label="模型" width="130px" />
-            <el-table-column prop="type" label="类型">
-              <template #default="scope">
-                <el-tag size="small" :type="tagColors[scope.row.type]">{{
-                  scope.row.type_str
-                }}</el-tag>
-              </template>
-            </el-table-column>
-            <el-table-column label="数额">
-              <template #default="scope">
-                <div>
-                  <el-text type="success" v-if="scope.row.mark === 1"
-                    >+{{ scope.row.amount }}</el-text
-                  >
-                  <el-text type="danger" v-if="scope.row.mark === 0"
-                    >-{{ scope.row.amount }}</el-text
-                  >
-                </div>
-              </template>
-            </el-table-column>
-            <el-table-column prop="balance" label="余额" />
-            <el-table-column label="发生时间" width="160px">
-              <template #default="scope">
-                <span>{{ dateFormat(scope.row['created_at']) }}</span>
-              </template>
-            </el-table-column>
-            <el-table-column prop="remark" label="备注" />
-          </el-table>
-
-          <div class="pagination">
-            <el-pagination
-              v-if="total > 0"
-              background
-              layout="total,prev, pager, next"
-              style="--el-pagination-button-bg-color: rgba(86, 86, 95, 0.2)"
-              :hide-on-single-page="true"
-              v-model:current-page="page"
-              v-model:page-size="pageSize"
-              @current-change="fetchData()"
-              :total="total"
-            />
+        <div v-if="items.length > 0">
+          <div class="overflow-x-auto">
+            <table class="w-full text-sm text-left">
+              <thead>
+                <tr class="text-slate-400 border-b border-slate-700">
+                  <th class="px-4 py-3">用户</th>
+                  <th class="px-4 py-3">模型</th>
+                  <th class="px-4 py-3">类型</th>
+                  <th class="px-4 py-3">数额</th>
+                  <th class="px-4 py-3">余额</th>
+                  <th class="px-4 py-3">发生时间</th>
+                  <th class="px-4 py-3">备注</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr
+                  v-for="item in items"
+                  :key="item.id"
+                  class="border-b border-slate-700/50 hover:bg-slate-700/30"
+                >
+                  <td class="px-4 py-3 text-slate-200">{{ item.username }}</td>
+                  <td class="px-4 py-3 text-slate-200">{{ item.model }}</td>
+                  <td class="px-4 py-3">
+                    <span
+                      class="px-2 py-0.5 rounded text-xs"
+                      :class="tagClass(item.type)"
+                    >
+                      {{ item.type_str }}
+                    </span>
+                  </td>
+                  <td class="px-4 py-3">
+                    <span v-if="item.mark === 1" class="text-green-400 dark:text-green-500">+{{ item.amount }}</span>
+                    <span v-else class="text-red-400 dark:text-red-500">-{{ item.amount }}</span>
+                  </td>
+                  <td class="px-4 py-3 text-slate-200">{{ item.balance }}</td>
+                  <td class="px-4 py-3 text-slate-400">{{ dateFormat(item.created_at) }}</td>
+                  <td class="px-4 py-3 text-slate-400">{{ item.remark }}</td>
+                </tr>
+              </tbody>
+            </table>
           </div>
-        </el-row>
-        <el-empty :image-size="100" v-else :image="nodata" description="暂无数据" />
+
+          <div class="pagination flex justify-center mt-5">
+            <div class="flex gap-2">
+              <button
+                v-for="p in totalPages"
+                :key="p"
+                @click="page = p; fetchData()"
+                :class="page === p ? 'bg-violet-600 text-white' : 'bg-slate-700 text-slate-300 hover:bg-slate-600'"
+                class="px-3 py-1.5 rounded-lg"
+              >
+                {{ p }}
+              </button>
+            </div>
+          </div>
+        </div>
+        <div v-else class="text-center py-12 text-slate-400">
+          <i class="iconfont icon-empty text-5xl mb-3"></i>
+          <p>暂无数据</p>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import nodata from '@/assets/img/no-data.png'
-
 import { checkSession } from '@/store/cache'
 import { httpPost } from '@/utils/http'
 import { dateFormat } from '@/utils/libs'
-import { Search } from '@element-plus/icons-vue'
-import Clipboard from 'clipboard'
-import { ElMessage } from 'element-plus'
-import { onMounted, ref } from 'vue'
+import { showMessageInfo } from '@/utils/dialog'
+import { onMounted, ref, computed } from 'vue'
 
 const items = ref([])
 const total = ref(0)
 const page = ref(1)
 const pageSize = ref(20)
 const loading = ref(false)
-const listBoxHeight = window.innerHeight - 87
 const query = ref({
   model: '',
-  date: [],
+  startDate: '',
+  endDate: '',
 })
-const tagColors = ref(['primary', 'success', 'primary', 'danger', 'info', 'warning'])
+const tagColors = ['bg-violet-500/20 text-violet-400', 'bg-green-500/20 text-green-400', 'bg-violet-500/20 text-violet-400', 'bg-red-500/20 text-red-400', 'bg-slate-500/20 text-slate-400', 'bg-yellow-500/20 text-yellow-400']
+
+const totalPages = computed(() => Math.ceil(total.value / pageSize.value))
+
+const tagClass = (type) => tagColors[type] || tagColors[0]
 
 onMounted(() => {
   checkSession()
@@ -103,14 +120,6 @@ onMounted(() => {
       fetchData()
     })
     .catch(() => {})
-  const clipboard = new Clipboard('.copy-order-no')
-  clipboard.on('success', () => {
-    ElMessage.success('复制成功！')
-  })
-
-  clipboard.on('error', () => {
-    ElMessage.error('复制失败！')
-  })
 })
 
 // 获取数据
@@ -118,7 +127,7 @@ const fetchData = () => {
   loading.value = true
   httpPost('/api/powerLog/list', {
     model: query.value.model,
-    date: query.value.date,
+    date: query.value.startDate && query.value.endDate ? [query.value.startDate, query.value.endDate] : [],
     page: page.value,
     page_size: pageSize.value,
   })
@@ -133,44 +142,19 @@ const fetchData = () => {
     })
     .catch((e) => {
       loading.value = false
-      ElMessage.error('获取数据失败：' + e.message)
+      showMessageInfo('获取数据失败：' + e.message)
     })
 }
 </script>
 
 <style lang="scss" scoped>
-@use '../assets/css/custom-scroll.scss' as *;
-
 .power-log {
-  color: #ffffff;
   .inner {
-    padding: 0 20px 20px 20px;
-    overflow: auto;
-
     .list-box {
-      overflow-x: hidden;
-      //overflow-y auto
-      background: var(--chat-bg);
-      padding: 20px;
-      margin-top: 20px;
-      border-radius: 10px;
       .handle-box {
-        padding: 0 20px 20px 0;
-
-        .el-input {
+        input[type="date"] {
           max-width: 150px;
         }
-
-        .el-date-editor {
-          max-width: 200px;
-        }
-      }
-
-      .pagination {
-        display: flex;
-        justify-content: center;
-        width: 100%;
-        margin-top: 20px;
       }
     }
   }

@@ -1,16 +1,44 @@
 <template>
-  <el-config-provider>
-    <router-view />
-  </el-config-provider>
+  <router-view v-slot="{ Component, route }">
+    <!-- Use AppLayout for main app routes -->
+    <AppLayout v-if="isAppRoute(route)">
+      <component :is="Component" />
+    </AppLayout>
+    <!-- Use AuthLayout for auth routes -->
+    <AuthLayout v-else-if="isAuthRoute(route)">
+      <component :is="Component" />
+    </AuthLayout>
+    <!-- No layout wrapper for other routes -->
+    <component :is="Component" v-else />
+  </router-view>
 </template>
 
 <script setup>
+import '@/styles/main.css'
+import { onMounted } from 'vue'
 import { checkSession, getSystemInfo } from '@/store/cache'
-import { useSharedStore } from '@/store/sharedata'
 import { showMessageInfo } from '@/utils/dialog'
 import { isChrome, isMobile } from '@/utils/libs'
-import { ElConfigProvider } from 'element-plus'
-import { onMounted } from 'vue'
+import AppLayout from '@/components/layout/AppLayout.vue'
+import AuthLayout from '@/components/layout/AuthLayout.vue'
+
+// Routes that use AppLayout (main app shell with sidebar)
+const appRoutes = [
+  '/home', '/chat', '/mj', '/sd', '/member', '/apps', '/images-wall',
+  '/invite', '/powerLog', '/xmind', '/dalle', '/suno', '/video', '/jimeng',
+  '/balance', '/keys', '/usage', '/profile', '/dashboard'
+]
+
+// Routes that use AuthLayout (login, register, reset password)
+const authRoutes = ['/login', '/register', '/resetpassword', '/admin/login']
+
+function isAppRoute(r) {
+  return appRoutes.some(path => r.path.startsWith(path))
+}
+
+function isAuthRoute(r) {
+  return authRoutes.some(path => r.path === path)
+}
 
 const debounce = (fn, delay) => {
   let timer
@@ -32,37 +60,42 @@ window.ResizeObserver = class ResizeObserver extends _ResizeObserver {
   }
 }
 
-const store = useSharedStore()
 onMounted(() => {
-  // 获取系统参数
+  // Get system parameters
   getSystemInfo().then((res) => {
     const link = document.createElement('link')
     link.rel = 'shortcut icon'
     link.href = res.data.logo
     document.head.appendChild(link)
   })
+
   if (!isChrome() && !isMobile()) {
     showMessageInfo('建议使用 Chrome 浏览器以获得最佳体验。')
   }
 
   checkSession()
     .then(() => {
-      store.setIsLogin(true)
+      // User is logged in
     })
     .catch(() => {})
 
-  // 设置主题
-  document.documentElement.setAttribute('data-theme', store.theme)
+  // Set theme - use Tailwind dark mode class
+  const savedTheme = localStorage.getItem('theme')
+  if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+    document.documentElement.classList.add('dark')
+  } else {
+    document.documentElement.classList.remove('dark')
+  }
 })
 
-// 打印 banner
+// Print banner
 const banner = `
-  .oooooo.                        oooo              .o.       ooooo 
+  .oooooo.                        oooo              .o.       ooooo
  d8P'  'Y8b                        888             .888.       888
-888            .ooooo.   .ooooo.   888  oooo      .8"888.      888  
-888           d88'  88b d88'  88b  888 .8P'      .8'  888.     888  
-888     ooooo 888ooo888 888ooo888  888888.      .88ooo8888.    888  
-'88.    .88'  888    .o 888    .o  888  88b.   .8'      888.   888  
+888            .ooooo.   .ooooo.   888  oooo      .8"888.      888
+888           d88'  88b d88'  88b  888 .8P'      .8'  888.     888
+888     ooooo 888ooo888 888ooo888  888888.      .88ooo8888.    888
+'88.    .88'  888    .o 888    .o  888  88b.   .8'      888.   888
   Y8bood8P'    Y8bod8P'  Y8bod8P' o888o o888o o88o     o8888o o888o
   `
 console.log('%c' + banner + '', 'color: purple;font-size: 18px;')
@@ -78,7 +111,7 @@ console.log(
 )
 </script>
 
-<style lang="scss">
+<style>
 html,
 body {
   margin: 0;
@@ -92,70 +125,34 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
-
-  // --primary-color: #21aa93
-
-  h1 {
-    font-size: 2em;
-  } /* 通常是 2em */
-  h2 {
-    font-size: 1.5em;
-  } /* 通常是 1.5em */
-  h3 {
-    font-size: 1.17em;
-  } /* 通常是 1.17em */
-  h4 {
-    font-size: 1em;
-  } /* 通常是 1em */
-  h5 {
-    font-size: 0.83em;
-  } /* 通常是 0.83em */
-  h6 {
-    font-size: 0.67em;
-  } /* 通常是 0.67em */
 }
 
-.el-overlay-dialog {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  .el-dialog {
-    margin: 0;
-
-    .el-dialog__body {
-      overflow-y: auto;
-      max-height: calc(100vh - 100px);
-    }
-  }
+h1 {
+  font-size: 2em;
+}
+h2 {
+  font-size: 1.5em;
+}
+h3 {
+  font-size: 1.17em;
+}
+h4 {
+  font-size: 1em;
+}
+h5 {
+  font-size: 0.83em;
+}
+h6 {
+  font-size: 0.67em;
 }
 
-.el-popper.is-customized {
-  /* 设置内边距以保证高度为32px */
-  padding: 6px 12px;
-  background: linear-gradient(180deg, #e1bee7, #7e57c2);
-  color: #fff;
+/* Scrollbar hide utility */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
 }
 
-.el-popper.is-customized .el-popper__arrow::before {
-  background: linear-gradient(180deg, #b39ddb, #7e57c2);
-  right: 0;
-}
-
-/* 省略显示 */
-.ellipsis {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.van-toast--fail {
-  background: #fef0f0;
-  color: #f56c6c;
-}
-
-.van-toast--success {
-  background: #d6fbcc;
-  color: #07c160;
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 </style>

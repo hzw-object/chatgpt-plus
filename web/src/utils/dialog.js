@@ -2,7 +2,6 @@
  * Util lib functions
  */
 import { isMobile } from '@/utils/libs'
-import { ElMessage } from 'element-plus'
 import {
   closeToast,
   showConfirmDialog,
@@ -11,6 +10,8 @@ import {
   showSuccessToast,
   showToast,
 } from 'vant'
+
+export { showConfirmDialog }
 
 export function showLoginDialog(router) {
   showConfirmDialog({
@@ -29,7 +30,7 @@ export function showMessageOK(message) {
   if (isMobile()) {
     showSuccessToast(message)
   } else {
-    ElMessage.success(message)
+    showSuccessToast(message)
   }
 }
 
@@ -41,7 +42,7 @@ export function showMessageInfo(message) {
   if (isMobile()) {
     showToast(message)
   } else {
-    ElMessage.info(message)
+    showToast(message)
   }
 }
 
@@ -49,7 +50,7 @@ export function showMessageError(message) {
   if (isMobile()) {
     showFailToast({ message: message })
   } else {
-    ElMessage.error(message)
+    showFailToast({ message: message })
   }
 }
 

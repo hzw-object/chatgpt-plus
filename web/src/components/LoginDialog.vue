@@ -10,45 +10,35 @@
               <span>账号登录</span>
             </div>
           </template>
-          <el-form :model="data" class="form space-y-5">
+          <form class="form space-y-5" @submit.prevent="submitLogin">
             <div class="block">
-              <el-input placeholder="账号" size="large" v-model="data.username" autocomplete="off">
-                <template #prefix>
-                  <el-icon>
-                    <Iphone />
-                  </el-icon>
-                </template>
-              </el-input>
+              <input
+                class="w-full h-12 px-4 rounded-xl border border-slate-300 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100 focus:border-violet-500 focus:outline-none focus:ring-2 focus:ring-violet-500/20"
+                placeholder="账号"
+                v-model="data.username"
+                autocomplete="off"
+              />
             </div>
 
             <div class="block">
-              <el-input
+              <input
+                class="w-full h-12 px-4 rounded-xl border border-slate-300 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100 focus:border-violet-500 focus:outline-none focus:ring-2 focus:ring-violet-500/20"
                 placeholder="请输入密码(8-16位)"
                 maxlength="16"
-                size="large"
+                type="password"
                 v-model="data.password"
-                show-password
                 autocomplete="off"
-              >
-                <template #prefix>
-                  <el-icon>
-                    <Lock />
-                  </el-icon>
-                </template>
-              </el-input>
+              />
             </div>
 
-            <el-row class="btn-row mt-8" :gutter="20">
-              <el-col :span="24">
-                <button
-                  class="w-full h-12 rounded-xl text-base font-medium text-white bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg active:translate-y-0 shadow-md"
-                  @click="submitLogin"
-                  type="button"
-                >
-                  {{ loading ? '登录中...' : '登 录' }}
-                </button>
-              </el-col>
-            </el-row>
+            <div class="btn-row mt-8">
+              <button
+                class="w-full h-12 rounded-xl text-base font-medium text-white bg-gradient-to-r from-violet-500 to-violet-700 hover:from-violet-600 hover:to-violet-800 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg active:translate-y-0 shadow-md"
+                type="submit"
+              >
+                {{ loading ? '登录中...' : '登 录' }}
+              </button>
+            </div>
 
             <div class="w-full">
               <div
@@ -56,26 +46,25 @@
                 style="color: var(--login-text-color)"
               >
                 还没有账号？
-                <el-button
+                <button
                   size="small"
                   class="ml-2 rounded-md px-2 py-1 transition-colors duration-200"
                   style="color: var(--login-link-color)"
                   @click="login = false"
-                  @mouseenter="$event.target.style.background = 'var(--login-link-hover-bg)'"
-                  @mouseleave="$event.target.style.background = 'transparent'"
-                  >注册</el-button
+                  type="button"
+                  >注册</button
                 >
 
-                <el-button
-                  type="info"
+                <button
+                  type="button"
                   class="forget ml-4"
                   size="small"
                   @click="showResetPass = true"
-                  >忘记密码？</el-button
+                  >忘记密码？</button
                 >
               </div>
             </div>
-          </el-form>
+          </form>
         </custom-tab-pane>
 
         <!-- 微信登录 -->
@@ -88,7 +77,12 @@
           </template>
           <div class="wechat-login pt-3">
             <div class="qr-code-container">
-              <div class="qr-code-wrapper w-[200px] h-[200px] mx-auto" v-loading="qrcodeLoading">
+              <div class="qr-code-wrapper w-[200px] h-[200px] mx-auto" v-if="qrcodeLoading">
+                <div class="w-[200px] h-[200px] flex justify-center items-center">
+                  <i class="iconfont icon-wechat !text-3xl text-green-600"></i>
+                </div>
+              </div>
+              <div class="qr-code-wrapper w-[200px] h-[200px] mx-auto" v-else>
                 <img :src="wechatLoginQRCode" class="qr-frame" v-if="wechatLoginQRCode" />
                 <div
                   v-else
@@ -103,14 +97,14 @@
                     <p class="expired-text">二维码已过期</p>
                     <button
                       @click="getWxLoginURL"
-                      class="bg-gray-200 text-gray-600 px-2.5 py-1 rounded-md hover:bg-gray-300"
+                      class="bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-2.5 py-1 rounded-md hover:bg-slate-300 dark:hover:bg-slate-600"
                     >
                       <i class="iconfont icon-refresh text-lg"></i>
                     </button>
                   </div>
                 </div>
               </div>
-              <p class="text-center mt-4 text-gray-600 dark:text-gray-400">
+              <p class="text-center mt-4 text-slate-600 dark:text-slate-400">
                 请使用微信扫描二维码登录
               </p>
             </div>
@@ -120,163 +114,123 @@
     </div>
 
     <div class="register-box w-full" v-else>
-      <el-form :model="data" class="form space-y-5" v-if="enableRegister">
-        <el-tabs v-model="activeName" class="demo-tabs dark:text-white">
-          <el-tab-pane label="手机注册" name="mobile" v-if="enableMobile">
-            <div class="block">
-              <el-input
-                placeholder="手机号码"
-                size="large"
-                v-model="data.mobile"
-                maxlength="11"
-                autocomplete="off"
-              >
-                <template #prefix>
-                  <el-icon>
-                    <Iphone />
-                  </el-icon>
-                </template>
-              </el-input>
-            </div>
-            <div class="block mt-4">
-              <el-row :gutter="10">
-                <el-col :span="12">
-                  <el-input
-                    placeholder="验证码"
-                    size="large"
-                    maxlength="30"
-                    v-model="data.code"
-                    autocomplete="off"
-                  >
-                    <template #prefix>
-                      <el-icon>
-                        <Checked />
-                      </el-icon>
-                    </template>
-                  </el-input>
-                </el-col>
-                <el-col :span="12">
-                  <send-msg size="large" :receiver="data.mobile" type="mobile" />
-                </el-col>
-              </el-row>
-            </div>
-          </el-tab-pane>
-          <el-tab-pane label="邮箱注册" name="email" v-if="enableEmail">
-            <div class="block">
-              <el-input placeholder="邮箱地址" size="large" v-model="data.email" autocomplete="off">
-                <template #prefix>
-                  <el-icon>
-                    <Message />
-                  </el-icon>
-                </template>
-              </el-input>
-            </div>
-            <div class="block mt-4">
-              <el-row :gutter="10">
-                <el-col :span="12">
-                  <el-input
-                    placeholder="验证码"
-                    size="large"
-                    maxlength="30"
-                    v-model="data.code"
-                    autocomplete="off"
-                  >
-                    <template #prefix>
-                      <el-icon>
-                        <Checked />
-                      </el-icon>
-                    </template>
-                  </el-input>
-                </el-col>
-                <el-col :span="12">
-                  <send-msg size="large" :receiver="data.email" type="email" />
-                </el-col>
-              </el-row>
-            </div>
-          </el-tab-pane>
-          <el-tab-pane label="用户名注册" name="username" v-if="enableUser">
-            <div class="block">
-              <el-input
-                placeholder="用户名"
-                size="large"
-                v-model="data.username"
-                autocomplete="off"
-              >
-                <template #prefix>
-                  <el-icon>
-                    <Iphone />
-                  </el-icon>
-                </template>
-              </el-input>
-            </div>
-          </el-tab-pane>
-        </el-tabs>
+      <form class="form space-y-5" v-if="enableRegister" @submit.prevent="submitRegister">
+        <div class="flex border-b border-slate-200 dark:border-slate-700 mb-4">
+          <button
+            v-if="enableMobile"
+            type="button"
+            class="px-4 py-2 text-sm font-medium transition-colors duration-200"
+            :class="activeName === 'mobile' ? 'border-b-2 border-violet-500 text-violet-600' : 'text-slate-500 hover:text-slate-700 dark:hover:text-slate-300'"
+            @click="activeName = 'mobile'"
+          >
+            手机注册
+          </button>
+          <button
+            v-if="enableEmail"
+            type="button"
+            class="px-4 py-2 text-sm font-medium transition-colors duration-200"
+            :class="activeName === 'email' ? 'border-b-2 border-violet-500 text-violet-600' : 'text-slate-500 hover:text-slate-700 dark:hover:text-slate-300'"
+            @click="activeName = 'email'"
+          >
+            邮箱注册
+          </button>
+          <button
+            v-if="enableUser"
+            type="button"
+            class="px-4 py-2 text-sm font-medium transition-colors duration-200"
+            :class="activeName === 'username' ? 'border-b-2 border-violet-500 text-violet-600' : 'text-slate-500 hover:text-slate-700 dark:hover:text-slate-300'"
+            @click="activeName = 'username'"
+          >
+            用户名注册
+          </button>
+        </div>
+
+        <div v-if="activeName === 'mobile' || activeName === 'email'">
+          <div class="block">
+            <input
+              class="w-full h-12 px-4 rounded-xl border border-slate-300 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100 focus:border-violet-500 focus:outline-none focus:ring-2 focus:ring-violet-500/20"
+              :placeholder="activeName === 'mobile' ? '手机号码' : '邮箱地址'"
+              size="large"
+              :value="activeName === 'mobile' ? data.mobile : data.email"
+              @input="(e) => activeName === 'mobile' ? data.mobile = e.target.value : data.email = e.target.value"
+              autocomplete="off"
+            />
+          </div>
+          <div class="block mt-4 flex gap-2">
+            <input
+              class="flex-1 h-12 px-4 rounded-xl border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white focus:border-purple-500 focus:outline-none"
+              placeholder="验证码"
+              size="large"
+              maxlength="30"
+              v-model="data.code"
+              autocomplete="off"
+            />
+            <send-msg size="large" :receiver="activeName === 'mobile' ? data.mobile : data.email" :type="activeName" />
+          </div>
+        </div>
+
+        <div v-if="activeName === 'username'">
+          <div class="block">
+            <input
+              class="w-full h-12 px-4 rounded-xl border border-slate-300 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100 focus:border-violet-500 focus:outline-none focus:ring-2 focus:ring-violet-500/20"
+              placeholder="用户名"
+              size="large"
+              v-model="data.username"
+              autocomplete="off"
+            />
+          </div>
+        </div>
 
         <div class="block">
-          <el-input
+          <input
+            class="w-full h-12 px-4 rounded-xl border border-slate-300 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100 focus:border-violet-500 focus:outline-none focus:ring-2 focus:ring-violet-500/20"
             placeholder="请输入密码(8-16位)"
             maxlength="16"
             size="large"
             v-model="data.password"
-            show-password
+            type="password"
             autocomplete="off"
-          >
-            <template #prefix>
-              <el-icon>
-                <Lock />
-              </el-icon>
-            </template>
-          </el-input>
+          />
         </div>
 
         <div class="block">
-          <el-input
+          <input
+            class="w-full h-12 px-4 rounded-xl border border-slate-300 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100 focus:border-violet-500 focus:outline-none focus:ring-2 focus:ring-violet-500/20"
             placeholder="重复密码(8-16位)"
             size="large"
             maxlength="16"
             v-model="data.repass"
-            show-password
+            type="password"
             autocomplete="off"
-          >
-            <template #prefix>
-              <el-icon>
-                <Lock />
-              </el-icon>
-            </template>
-          </el-input>
+          />
         </div>
 
         <div class="block">
-          <el-input
+          <input
+            class="w-full h-12 px-4 rounded-xl border border-slate-300 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100 focus:border-violet-500 focus:outline-none focus:ring-2 focus:ring-violet-500/20"
             placeholder="邀请码(可选)"
             size="large"
             v-model="data.invite_code"
             autocomplete="off"
-          >
-            <template #prefix>
-              <el-icon>
-                <Message />
-              </el-icon>
-            </template>
-          </el-input>
+          />
         </div>
 
         <div class="block text-sm">
-          <el-checkbox v-model="agreeChecked">
+          <label class="flex items-center">
+            <input type="checkbox" v-model="agreeChecked" class="mr-2" />
             我已阅读并同意
             <a href="javascript:void(0)" class="text-blue-500" @click="openAgreement"
               >《用户协议》</a
             >
             和
             <a href="javascript:void(0)" class="text-blue-500" @click="openPrivacy">《隐私政策》</a>
-          </el-checkbox>
+          </label>
         </div>
 
         <div class="w-full">
           <button
-            class="w-full h-12 rounded-xl text-base font-medium text-white bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg active:translate-y-0 shadow-md"
-            @click="submitRegister"
-            type="button"
+            class="w-full h-12 rounded-xl text-base font-medium text-white bg-gradient-to-r from-violet-500 to-violet-700 hover:from-violet-600 hover:to-violet-800 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg active:translate-y-0 shadow-md"
+            type="submit"
           >
             {{ loading ? '注册中...' : '注 册' }}
           </button>
@@ -287,47 +241,50 @@
           style="color: var(--login-text-color)"
         >
           已有账号？
-          <el-button
+          <button
             size="small"
             class="ml-2 rounded-md px-2 py-1 transition-colors duration-200"
             style="color: var(--login-link-color)"
             @click="login = true"
-            @mouseenter="$event.target.style.background = 'var(--login-link-hover-bg)'"
-            @mouseleave="$event.target.style.background = 'transparent'"
-            >登录</el-button
+            type="button"
+            >登录</button
           >
         </div>
-      </el-form>
+      </form>
 
       <div class="tip-result" v-else>
-        <el-row :gutter="20">
-          <el-col :span="12">
-            <el-result icon="error" title="注册功能已关闭">
-              <template #sub-title>
-                <p>抱歉，系统已关闭注册功能，请联系管理员添加账号！</p>
-              </template>
-            </el-result>
-          </el-col>
+        <div class="flex gap-4">
+          <div class="flex-1 text-center py-8">
+            <i class="iconfont icon-close-circle text-5xl text-red-500 mb-4"></i>
+            <p class="text-lg font-medium mb-2">注册功能已关闭</p>
+            <p class="text-sm text-slate-500 dark:text-slate-400">抱歉，系统已关闭注册功能，请联系管理员添加账号！</p>
+          </div>
 
-          <el-col :span="12">
-            <div class="wechat-card">
-              <el-image :src="wxImg" />
-            </div>
-          </el-col>
-        </el-row>
+          <div class="flex-1">
+            <img :src="wxImg" class="w-32 h-32 mx-auto" />
+          </div>
+        </div>
       </div>
     </div>
     <captcha v-if="enableCaptcha" :type="captchaType" @success="submit" ref="captchaRef" />
 
     <reset-pass @hide="showResetPass = false" :show="showResetPass" />
 
-    <el-dialog v-model="showAgreement" title="用户协议" :append-to-body="true">
-      <div class="prose" v-html="agreementHtml"></div>
-    </el-dialog>
+    <div v-if="showAgreement" class="fixed inset-0 z-50 flex items-center justify-center bg-black/50" @click.self="showAgreement = false">
+      <div class="bg-white dark:bg-slate-800 rounded-lg p-6 w-full max-w-2xl max-h-[80vh] overflow-auto">
+        <h3 class="text-lg font-medium mb-4">用户协议</h3>
+        <div class="prose" v-html="agreementHtml"></div>
+        <button @click="showAgreement = false" class="mt-4 px-4 py-2 bg-violet-500 text-white rounded-lg">关闭</button>
+      </div>
+    </div>
 
-    <el-dialog v-model="showPrivacy" title="隐私政策" :append-to-body="true">
-      <div class="prose" v-html="privacyHtml"></div>
-    </el-dialog>
+    <div v-if="showPrivacy" class="fixed inset-0 z-50 flex items-center justify-center bg-black/50" @click.self="showPrivacy = false">
+      <div class="bg-white dark:bg-slate-800 rounded-lg p-6 w-full max-w-2xl max-h-[80vh] overflow-auto">
+        <h3 class="text-lg font-medium mb-4">隐私政策</h3>
+        <div class="prose" v-html="privacyHtml"></div>
+        <button @click="showPrivacy = false" class="mt-4 px-4 py-2 bg-violet-500 text-white rounded-lg">关闭</button>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -340,11 +297,10 @@ import CustomTabs from '@/components/ui/CustomTabs.vue'
 import { getSystemInfo } from '@/store/cache'
 import { setUserToken } from '@/store/session'
 import { useSharedStore } from '@/store/sharedata'
+import { showMessageError, showMessageSuccess } from '@/utils/dialog'
 import { httpGet, httpPost } from '@/utils/http'
 import { arrayContains } from '@/utils/libs'
 import { validateEmail, validateMobile } from '@/utils/validate'
-import { Checked, Iphone, Lock, Message } from '@element-plus/icons-vue'
-import { ElMessage } from 'element-plus'
 import { marked } from 'marked'
 import QRCode from 'qrcode'
 import { onMounted, onUnmounted, ref, watch } from 'vue'
@@ -444,7 +400,7 @@ onMounted(() => {
       }
     })
     .catch((e) => {
-      ElMessage.error('获取系统配置失败：' + e.message)
+      showMessageError('获取系统配置失败：' + e.message)
     })
 
   httpGet('/api/captcha/config').then((res) => {
@@ -526,7 +482,7 @@ const getWxLoginURL = () => {
       }, 60 * 1000) // 1分钟过期
     })
     .catch((e) => {
-      ElMessage.error('获取微信登录 URL 失败，' + e.message)
+      showMessageError('获取微信登录 URL 失败，' + e.message)
     })
     .finally(() => {
       qrcodeLoading.value = false
@@ -560,7 +516,7 @@ const checkLoginStatus = () => {
           clearTimeout(qrcodeTimer.value)
           setUserToken(res.data.token)
           store.setIsLogin(true)
-          ElMessage.success('登录成功！')
+          showMessageSuccess('登录成功！')
           emits('hide')
           emits('success')
           break
@@ -580,7 +536,7 @@ const checkLoginStatus = () => {
           // 其他错误情况
           clearInterval(pollingTimer.value)
           clearTimeout(qrcodeTimer.value)
-          ElMessage.error('登录失败，请重试')
+          showMessageError('登录失败，请重试')
           break
       }
     })
@@ -595,10 +551,10 @@ const checkLoginStatus = () => {
 // 登录操作
 const submitLogin = () => {
   if (!data.value.username) {
-    return ElMessage.error('请输入用户名')
+    return showMessageError('请输入用户名')
   }
   if (!data.value.password) {
-    return ElMessage.error('请输入密码')
+    return showMessageError('请输入密码')
   }
   if (enableCaptcha.value) {
     captchaRef.value.loadCaptcha()
@@ -617,12 +573,12 @@ const doLogin = (verifyData) => {
     .then((res) => {
       setUserToken(res.data.token)
       store.setIsLogin(true)
-      ElMessage.success('登录成功！')
+      showMessageSuccess('登录成功！')
       emits('hide')
       emits('success')
     })
     .catch((e) => {
-      ElMessage.error('登录失败，' + e.message)
+      showMessageError('登录失败，' + e.message)
     })
     .finally(() => {
       loading.value = false
@@ -632,29 +588,29 @@ const doLogin = (verifyData) => {
 // 注册操作
 const submitRegister = () => {
   if (activeName.value === 'username' && data.value.username === '') {
-    return ElMessage.error('请输入用户名')
+    return showMessageError('请输入用户名')
   }
 
   if (activeName.value === 'mobile' && !validateMobile(data.value.mobile)) {
-    return ElMessage.error('请输入合法的手机号')
+    return showMessageError('请输入合法的手机号')
   }
 
   if (activeName.value === 'email' && !validateEmail(data.value.email)) {
-    return ElMessage.error('请输入合法的邮箱地址')
+    return showMessageError('请输入合法的邮箱地址')
   }
 
   if (data.value.password.length < 8) {
-    return ElMessage.error('密码的长度为8-16个字符')
+    return showMessageError('密码的长度为8-16个字符')
   }
   if (data.value.repass !== data.value.password) {
-    return ElMessage.error('两次输入密码不一致')
+    return showMessageError('两次输入密码不一致')
   }
 
   if ((activeName.value === 'mobile' || activeName.value === 'email') && data.value.code === '') {
-    return ElMessage.error('请输入验证码')
+    return showMessageError('请输入验证码')
   }
   if (!agreeChecked.value) {
-    return ElMessage.error('请先阅读并同意《用户协议》和《隐私政策》')
+    return showMessageError('请先阅读并同意《用户协议》和《隐私政策》')
   }
   if (enableCaptcha.value) {
     captchaRef.value.loadCaptcha()
@@ -673,7 +629,7 @@ const doRegister = (verifyData) => {
   httpPost('/api/user/register', data.value)
     .then((res) => {
       setUserToken(res.data.token)
-      ElMessage.success({
+      showMessageSuccess({
         message: '注册成功!',
         onClose: () => {
           emits('hide')
@@ -683,7 +639,7 @@ const doRegister = (verifyData) => {
       })
     })
     .catch((e) => {
-      ElMessage.error('注册失败，' + e.message)
+      showMessageError('注册失败，' + e.message)
     })
     .finally(() => {
       loading.value = false
@@ -698,7 +654,7 @@ const openAgreement = () => {
         agreementHtml.value = marked.parse(res.data?.content || '')
         showAgreement.value = true
       })
-      .catch((e) => ElMessage.error('加载用户协议失败：' + e.message))
+      .catch((e) => showMessageError('加载用户协议失败：' + e.message))
   } else {
     showAgreement.value = true
   }
@@ -712,7 +668,7 @@ const openPrivacy = () => {
         privacyHtml.value = marked.parse(res.data?.content || '')
         showPrivacy.value = true
       })
-      .catch((e) => ElMessage.error('加载隐私政策失败：' + e.message))
+      .catch((e) => showMessageError('加载隐私政策失败：' + e.message))
   } else {
     showPrivacy.value = true
   }

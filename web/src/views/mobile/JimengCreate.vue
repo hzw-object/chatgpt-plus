@@ -1,15 +1,15 @@
 <template>
-  <div class="jimeng-create">
+  <div class="jimeng-create dark:bg-slate-950">
     <!-- 页面头部 -->
-    <div class="sticky top-0 z-40 bg-white shadow-sm">
+    <div class="sticky top-0 z-40 bg-white dark:bg-slate-800 shadow-sm dark:shadow-black/30">
       <div class="flex items-center px-4 h-14">
         <button
           @click="goBack"
-          class="flex items-center justify-center w-8 h-8 rounded-full hover:bg-gray-100 transition-colors"
+          class="flex items-center justify-center w-8 h-8 rounded-full hover:bg-gray-100 dark:hover:bg-slate-600 transition-colors"
         >
-          <i class="iconfont icon-back text-gray-600"></i>
+          <i class="iconfont icon-back text-gray-600 dark:text-slate-400"></i>
         </button>
-        <h1 class="flex-1 text-center text-lg text-gray-900">即梦AI</h1>
+        <h1 class="flex-1 text-center text-lg text-gray-900 dark:text-white">即梦AI</h1>
         <div class="w-8"></div>
       </div>
     </div>
@@ -31,9 +31,9 @@
           <!-- 参数容器 -->
           <div class="py-3">
             <!-- 文生图 -->
-            <div class="bg-white rounded-xl p-4 shadow-sm mb-3">
+            <div class="bg-white dark:bg-slate-700 rounded-xl p-4 shadow-sm mb-3 dark:shadow-black/30">
               <div class="mb-3">
-                <label class="text-gray-700 font-semibold">提示词：</label>
+                <label class="text-gray-700 dark:text-slate-300 font-semibold">提示词：</label>
               </div>
               <el-input
                 v-model="jimengStore.currentPrompt"
@@ -46,15 +46,15 @@
             </div>
 
             <!-- 功能开关 -->
-            <div class="bg-white rounded-xl p-4 shadow-sm mb-3">
+            <div class="bg-white dark:bg-slate-700 rounded-xl p-4 shadow-sm mb-3 dark:shadow-black/30">
               <div class="flex justify-between items-center w-full">
-                <span class="text-gray-700 font-semibold">图生图人像写真</span>
+                <span class="text-gray-700 dark:text-slate-300 font-semibold">图生图人像写真</span>
                 <el-switch v-model="jimengStore.useImageInput" size="default" />
               </div>
             </div>
 
             <!-- 图生图参数 -->
-            <div class="bg-white rounded-xl p-4 shadow-sm mb-3" v-if="jimengStore.useImageInput">
+            <div class="bg-white dark:bg-slate-700 rounded-xl p-4 shadow-sm mb-3 dark:shadow-black/30" v-if="jimengStore.useImageInput">
               <ImageUpload
                 v-model="jimengStore.imageToImageParams.image_input"
                 :max-count="1"
@@ -62,8 +62,8 @@
               />
             </div>
 
-            <div class="bg-white rounded-xl p-4 shadow-sm mb-3">
-              <label class="block text-gray-700 mb-3 font-semibold">图片尺寸：</label>
+            <div class="bg-white dark:bg-slate-700 rounded-xl p-4 shadow-sm mb-3 dark:shadow-black/30">
+              <label class="block text-gray-700 dark:text-slate-300 mb-3 font-semibold">图片尺寸：</label>
               <CustomSelect
                 v-model="jimengStore.textToImageParams.size"
                 :options="jimengStore.imageSizeOptions"
@@ -71,11 +71,11 @@
               />
             </div>
 
-            <div class="bg-white rounded-xl p-4 shadow-sm mb-3">
+            <div class="bg-white dark:bg-slate-700 rounded-xl p-4 shadow-sm mb-3 dark:shadow-black/30">
               <span class="flex justify-between items-center mb-3">
-                <span class="text-gray-700 font-semibold">创意度：</span>
+                <span class="text-gray-700 dark:text-slate-300 font-semibold">创意度：</span>
                 <el-tooltip content="创意度越高，影响文本描述的程度越高" placement="top">
-                  <i class="iconfont icon-info cursor-pointer ml-1"></i>
+                  <i class="iconfont icon-info cursor-pointer ml-1 text-gray-500 dark:text-slate-400"></i>
                 </el-tooltip>
               </span>
 
@@ -89,9 +89,9 @@
               </div>
             </div>
 
-            <div class="bg-white rounded-xl p-4 shadow-sm mb-3">
+            <div class="bg-white dark:bg-slate-700 rounded-xl p-4 shadow-sm mb-3 dark:shadow-black/30">
               <div class="flex justify-between items-center w-full">
-                <label class="text-gray-700 font-semibold">智能优化提示词</label>
+                <label class="text-gray-700 dark:text-slate-300 font-semibold">智能优化提示词</label>
                 <el-switch v-model="jimengStore.textToImageParams.use_pre_llm" size="default" />
               </div>
             </div>
@@ -107,9 +107,9 @@
           </template>
 
           <div class="py-3">
-            <div class="bg-white rounded-xl p-4 shadow-sm mb-3">
+            <div class="bg-white dark:bg-slate-700 rounded-xl p-4 shadow-sm mb-3 dark:shadow-black/30">
               <div class="mb-3">
-                <label class="text-gray-700 font-semibold">编辑提示词：</label>
+                <label class="text-gray-700 dark:text-slate-300 font-semibold">编辑提示词：</label>
               </div>
               <el-input
                 v-model="jimengStore.currentPrompt"
@@ -121,7 +121,7 @@
               />
             </div>
 
-            <div class="bg-white rounded-xl p-4 shadow-sm mb-3">
+            <div class="bg-white dark:bg-slate-700 rounded-xl p-4 shadow-sm mb-3 dark:shadow-black/30">
               <ImageUpload
                 v-model="jimengStore.imageEditParams.image_input"
                 :max-count="1"
@@ -129,9 +129,9 @@
               />
             </div>
 
-            <div class="bg-white rounded-xl p-4 shadow-sm mb-3">
+            <div class="bg-white dark:bg-slate-700 rounded-xl p-4 shadow-sm mb-3 dark:shadow-black/30">
               <div class="mb-3">
-                <label class="text-gray-700 font-semibold">编辑强度：</label>
+                <label class="text-gray-700 dark:text-slate-300 font-semibold">编辑强度：</label>
               </div>
               <el-slider
                 v-model="jimengStore.imageEditParams.scale"
@@ -152,7 +152,7 @@
           </template>
 
           <div class="py-3">
-            <div class="bg-white rounded-xl p-4 shadow-sm mb-3">
+            <div class="bg-white dark:bg-slate-700 rounded-xl p-4 shadow-sm mb-3 dark:shadow-black/30">
               <ImageUpload
                 v-model="jimengStore.imageEffectsParams.image_input"
                 :max-count="1"
@@ -160,9 +160,9 @@
               />
             </div>
 
-            <div class="bg-white rounded-xl p-4 shadow-sm mb-3">
+            <div class="bg-white dark:bg-slate-700 rounded-xl p-4 shadow-sm mb-3 dark:shadow-black/30">
               <div class="mb-3">
-                <label class="text-gray-700 font-semibold">特效模板：</label>
+                <label class="text-gray-700 dark:text-slate-300 font-semibold">特效模板：</label>
               </div>
               <CustomSelect
                 v-model="jimengStore.imageEffectsParams.template_id"
@@ -172,7 +172,7 @@
                 <template #option="{ option, selected }">
                   <div class="flex items-center w-full">
                     <el-image :src="option.preview" fit="cover" class="w-10 h-10 rounded-lg mr-2" />
-                    <span class="font-bold text-blue-600 mr-2">{{ option.label }}</span>
+                    <span class="font-bold text-violet-600 mr-2">{{ option.label }}</span>
                     <span v-if="selected" class="ml-auto text-green-500"
                       ><i class="iconfont icon-success"></i
                     ></span>
@@ -181,9 +181,9 @@
               </CustomSelect>
             </div>
 
-            <div class="bg-white rounded-xl p-4 shadow-sm mb-3">
+            <div class="bg-white dark:bg-slate-700 rounded-xl p-4 shadow-sm mb-3 dark:shadow-black/30">
               <div class="mb-3">
-                <label class="text-gray-700 font-semibold">输出尺寸：</label>
+                <label class="text-gray-700 dark:text-slate-300 font-semibold">输出尺寸：</label>
               </div>
               <CustomSelect
                 v-model="jimengStore.imageEffectsParams.size"
@@ -203,9 +203,9 @@
           </template>
 
           <div class="py-3">
-            <div class="bg-white rounded-xl p-4 shadow-sm mb-3">
+            <div class="bg-white dark:bg-slate-700 rounded-xl p-4 shadow-sm mb-3 dark:shadow-black/30">
               <div class="mb-3">
-                <label class="text-gray-700 font-semibold">提示词：</label>
+                <label class="text-gray-700 dark:text-slate-300 font-semibold">提示词：</label>
               </div>
               <el-input
                 v-model="jimengStore.currentPrompt"
@@ -217,14 +217,14 @@
               />
             </div>
 
-            <div class="bg-white rounded-xl p-4 shadow-sm mb-3">
+            <div class="bg-white dark:bg-slate-700 rounded-xl p-4 shadow-sm mb-3 dark:shadow-black/30">
               <div class="flex justify-between items-center w-full">
-                <label class="text-gray-700 font-semibold">使用图片辅助生成：</label>
+                <label class="text-gray-700 dark:text-slate-300 font-semibold">使用图片辅助生成：</label>
                 <el-switch v-model="jimengStore.useImageInput" size="default" />
               </div>
             </div>
 
-            <div class="bg-white rounded-xl p-4 shadow-sm mb-3" v-if="jimengStore.useImageInput">
+            <div class="bg-white dark:bg-slate-700 rounded-xl p-4 shadow-sm mb-3 dark:shadow-black/30" v-if="jimengStore.useImageInput">
               <ImageUpload
                 v-model="jimengStore.imageToVideoParams.image_input"
                 :max-count="2"
@@ -232,9 +232,9 @@
               />
             </div>
 
-            <div class="bg-white rounded-xl p-4 shadow-sm mb-3">
+            <div class="bg-white dark:bg-slate-700 rounded-xl p-4 shadow-sm mb-3 dark:shadow-black/30">
               <div class="mb-3">
-                <label class="text-gray-700 font-semibold">视频比例：</label>
+                <label class="text-gray-700 dark:text-slate-300 font-semibold">视频比例：</label>
               </div>
               <CustomSelect
                 v-model="jimengStore.textToVideoParams.aspect_ratio"
@@ -247,9 +247,9 @@
       </CustomTabs>
 
       <!-- 提交按钮 -->
-      <div class="bg-white rounded-xl p-4 shadow-sm mb-3">
+      <div class="bg-white dark:bg-slate-700 rounded-xl p-4 shadow-sm mb-3 dark:shadow-black/30">
         <button
-          class="w-full py-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-xl disabled:from-gray-400 disabled:to-gray-400 disabled:cursor-not-allowed hover:from-blue-600 hover:to-purple-700 transition-all duration-200 flex items-center justify-center space-x-2 text-base"
+          class="w-full py-3 bg-gradient-to-r from-violet-500 to-violet-700 text-white rounded-xl disabled:from-slate-400 disabled:to-slate-400 disabled:cursor-not-allowed hover:from-violet-600 hover:to-violet-800 transition-all duration-200 flex items-center justify-center space-x-2 text-base dark:disabled:from-slate-600 dark:disabled:to-slate-600"
           type="button"
           @click="jimengStore.submitTask"
           :disabled="jimengStore.submitting"
@@ -265,12 +265,12 @@
 
     <!-- 作品列表 -->
     <div class="jimeng-create__works">
-      <h2 class="jimeng-create__works-title">我的作品</h2>
+      <h2 class="jimeng-create__works-title text-gray-900 dark:text-white">我的作品</h2>
       <div class="jimeng-create__works-list space-y-4" v-if="jimengStore.currentList.length > 0">
         <div
           v-for="item in jimengStore.currentList"
           :key="item.id"
-          class="jimeng-create__works-item"
+          class="jimeng-create__works-item bg-slate-700 dark:bg-slate-700 dark:shadow-black/30"
         >
           <div class="jimeng-create__works-item-content">
             <div class="jimeng-create__works-item-thumb">
@@ -330,10 +330,10 @@
             <div class="jimeng-create__works-item-info">
               <div class="jimeng-create__works-item-info-header">
                 <div class="flex-1">
-                  <h3 class="jimeng-create__works-item-info-title">
+                  <h3 class="jimeng-create__works-item-info-title text-white dark:text-white">
                     {{ jimengStore.getFunctionName(item.type) }}
                   </h3>
-                  <p class="jimeng-create__works-item-info-prompt line-clamp-2">
+                  <p class="jimeng-create__works-item-info-prompt line-clamp-2 text-slate-300 dark:text-slate-300">
                     {{ item.prompt }}
                   </p>
                 </div>
@@ -395,7 +395,7 @@
                 v-if="item.status === 'success' && (item.img_url || item.video_url)"
                 @click="jimengStore.downloadFile(item)"
                 :disabled="item.downloading"
-                class="p-2 text-blue-500"
+                class="p-2 text-violet-500"
               >
                 <i v-if="item.downloading" class="iconfont icon-loading animate-spin"></i>
                 <i v-else class="iconfont icon-download"></i>
@@ -425,13 +425,13 @@
             v-if="item.status === 'failed' && item.err_msg"
             class="jimeng-create__works-item-error"
           >
-            <div class="jimeng-create__works-item-error-content">
-              <span class="jimeng-create__works-item-error-text line-clamp-3">{{
+            <div class="jimeng-create__works-item-error-content bg-slate-800 dark:bg-slate-800 border-red-400 dark:border-red-400">
+              <span class="jimeng-create__works-item-error-text line-clamp-3 text-red-400 dark:text-red-400">{{
                 item.err_msg
               }}</span>
               <button
                 @click="jimengStore.copyErrorMsg(item.err_msg)"
-                class="jimeng-create__works-item-error-copy-btn"
+                class="jimeng-create__works-item-error-copy-btn text-slate-400 dark:text-slate-400 hover:text-slate-300 dark:hover:text-slate-300"
                 title="复制错误信息"
               >
                 <i class="iconfont icon-copy"></i>
@@ -441,14 +441,14 @@
         </div>
 
         <!-- 加载更多 -->
-        <div v-if="jimengStore.listLoading" class="jimeng-create__works-loading">
+        <div v-if="jimengStore.listLoading" class="jimeng-create__works-loading text-slate-400 dark:text-slate-400">
           <i class="iconfont icon-loading animate-spin"></i>
         </div>
 
         <!-- 没有更多了 -->
         <div
           v-if="jimengStore.listFinished && !jimengStore.listLoading"
-          class="jimeng-create__works-finished"
+          class="jimeng-create__works-finished text-slate-400 dark:text-slate-400"
         >
           没有更多了
         </div>
@@ -462,13 +462,13 @@
     <!-- 媒体预览弹窗 -->
     <div
       v-if="jimengStore.showMediaDialog"
-      class="jimeng-create__media-dialog"
+      class="jimeng-create__media-dialog bg-black/80 dark:bg-black/80"
       @click="jimengStore.closeMediaDialog"
     >
-      <div @click.stop class="jimeng-create__media-dialog-content animate-scale-up">
-        <div class="jimeng-create__media-dialog-header">
-          <h3>媒体预览</h3>
-          <button @click="jimengStore.closeMediaDialog">
+      <div @click.stop class="jimeng-create__media-dialog-content animate-scale-up bg-slate-700 dark:bg-slate-700 dark:shadow-violet-800/50">
+        <div class="jimeng-create__media-dialog-header bg-slate-800 dark:bg-slate-800 border-slate-600 dark:border-slate-600">
+          <h3 class="text-white dark:text-white">媒体预览</h3>
+          <button class="text-slate-400 dark:text-slate-400 hover:text-slate-300 dark:hover:text-slate-300">
             <i class="iconfont icon-error"></i>
           </button>
         </div>
@@ -540,55 +540,9 @@ const goBack = () => {
 @use '@/assets/css/mobile/jimeng.scss';
 
 /* Dark 主题样式 - 按照 theme-dark.scss 的模式 */
-:root[data-theme='dark'] .jimeng-create {
-  background-color: rgb(13, 20, 53);
-
-  /* 页面头部样式 */
-  .sticky {
-    background-color: rgb(31, 41, 55) !important;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
-
-    h1 {
-      color: rgb(255, 255, 255) !important;
-    }
-
-    .iconfont {
-      color: rgb(156, 163, 175) !important;
-    }
-
-    button:hover {
-      background-color: rgb(75, 85, 99) !important;
-    }
-  }
-
-  /* 功能分类选择 */
+:root[data-theme='dark'] {
+  /* Element Plus 组件样式覆盖 - 需要 :deep() */
   .jimeng-create__content {
-    .bg-white {
-      background-color: rgb(55, 65, 81) !important;
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
-    }
-
-    .text-gray-700 {
-      color: rgb(209, 213, 219) !important;
-    }
-
-    .text-gray-900 {
-      color: rgb(255, 255, 255) !important;
-    }
-
-    .text-gray-600 {
-      color: rgb(156, 163, 175) !important;
-    }
-
-    .text-gray-500 {
-      color: rgb(156, 163, 175) !important;
-    }
-
-    .bg-gray-100:hover {
-      background-color: rgb(75, 85, 99) !important;
-    }
-
-    /* Element Plus 组件样式覆盖 */
     :deep(.el-input__wrapper) {
       background-color: rgb(31, 41, 55) !important;
       border-color: rgb(75, 85, 99) !important;
@@ -633,133 +587,6 @@ const goBack = () => {
 
     :deep(.el-slider__button) {
       border-color: rgb(139, 92, 246) !important;
-    }
-
-    :deep(.el-tooltip__trigger) {
-      color: rgb(156, 163, 175) !important;
-    }
-  }
-
-  /* 提交按钮 */
-  .bg-gradient-to-r {
-    background: linear-gradient(88deg, #af61f0 1.44%, #5b62ce) !important;
-
-    &:hover {
-      background: linear-gradient(88deg, #9f51e0 1.44%, #4b52be) !important;
-    }
-
-    &:disabled {
-      background: linear-gradient(88deg, #6b7280 1.44%, #4b5563) !important;
-    }
-  }
-
-  /* 作品列表 */
-  .jimeng-create__works {
-    &-title {
-      color: rgb(255, 255, 255) !important;
-    }
-
-    &-item {
-      background-color: rgb(55, 65, 81) !important;
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
-
-      &-content {
-        .jimeng-create__works-item-info {
-          &-title {
-            color: rgb(255, 255, 255) !important;
-          }
-
-          &-prompt {
-            color: rgb(209, 213, 219) !important;
-          }
-
-          &-tags {
-            &-item {
-              background-color: rgb(75, 85, 99) !important;
-              color: rgb(209, 213, 219) !important;
-
-              &--warning {
-                background-color: rgb(239, 68, 68) !important;
-                color: rgb(255, 255, 255) !important;
-              }
-
-              &--primary {
-                background-color: rgb(59, 130, 246) !important;
-                color: rgb(255, 255, 255) !important;
-              }
-
-              &--power {
-                background-color: rgb(139, 92, 246) !important;
-                color: rgb(255, 255, 255) !important;
-              }
-            }
-          }
-        }
-      }
-
-      &-quick-actions {
-        button {
-          color: rgb(156, 163, 175) !important;
-
-          &:hover {
-            color: rgb(209, 213, 219) !important;
-          }
-        }
-      }
-
-      &-error {
-        &-content {
-          background-color: rgb(31, 41, 55) !important;
-          border-color: rgb(239, 68, 68) !important;
-
-          .jimeng-create__works-item-error-text {
-            color: rgb(239, 68, 68) !important;
-          }
-
-          .jimeng-create__works-item-error-copy-btn {
-            color: rgb(156, 163, 175) !important;
-
-            &:hover {
-              color: rgb(209, 213, 219) !important;
-            }
-          }
-        }
-      }
-    }
-
-    &-loading {
-      color: rgb(156, 163, 175) !important;
-    }
-
-    &-finished {
-      color: rgb(156, 163, 175) !important;
-    }
-  }
-
-  /* 媒体预览弹窗 */
-  .jimeng-create__media-dialog {
-    background-color: rgba(0, 0, 0, 0.8) !important;
-
-    &-content {
-      background-color: rgb(55, 65, 81) !important;
-      box-shadow: 0 0 15px rgba(107, 80, 225, 0.8) !important;
-    }
-
-    &-header {
-      background-color: rgb(31, 41, 55) !important;
-      border-bottom-color: rgb(75, 85, 99) !important;
-
-      h3 {
-        color: rgb(255, 255, 255) !important;
-      }
-
-      button {
-        color: rgb(156, 163, 175) !important;
-
-        &:hover {
-          color: rgb(209, 213, 219) !important;
-        }
-      }
     }
   }
 
