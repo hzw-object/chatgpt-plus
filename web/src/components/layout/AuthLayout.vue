@@ -7,31 +7,39 @@
 
     <!-- Animated Background -->
     <div class="pointer-events-none absolute inset-0 overflow-hidden">
+      <!-- Animated Gradient Orbs -->
       <div class="auth-orb auth-orb-1"></div>
       <div class="auth-orb auth-orb-2"></div>
       <div class="auth-orb auth-orb-3"></div>
 
+      <!-- Grid Pattern -->
       <div
-        class="absolute inset-0 bg-[linear-gradient(rgba(139,92,246,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(139,92,246,0.03)_1px,transparent_1px)] bg-[size:64px_64px]"
+        class="absolute inset-0 bg-[linear-gradient(rgba(20,184,166,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(20,184,166,0.03)_1px,transparent_1px)] bg-[size:64px_64px]"
       ></div>
 
+      <!-- Floating Particles -->
       <div v-for="p in particles" :key="p.id" class="auth-particle" :style="p.style"></div>
     </div>
 
     <!-- Content Container -->
     <div class="relative z-10 w-full max-w-md">
       <!-- Logo/Brand -->
-      <div class="mb-6 text-center">
-        <div class="mb-3 inline-flex h-14 w-14 items-center justify-center overflow-hidden rounded-2xl shadow-md ring-1 ring-slate-200/50 dark:ring-slate-700/50">
+      <div class="mb-8 text-center">
+        <div
+          class="mb-4 inline-flex h-16 w-16 items-center justify-center overflow-hidden rounded-2xl shadow-lg shadow-slate-500/30"
+        >
           <img :src="siteLogo || '/logo.png'" alt="Logo" class="h-full w-full object-contain" />
         </div>
-        <h1 class="text-gradient text-2xl font-bold tracking-tight">
-          {{ siteName || 'GeekAI' }}
+        <h1 class="text-gradient mb-2 text-3xl font-bold">
+          {{ siteName }}
         </h1>
+        <p class="text-sm text-slate-500 dark:text-slate-400">
+          {{ siteSubtitle }}
+        </p>
       </div>
 
       <!-- Card Container -->
-      <div class="card rounded-2xl p-6 sm:p-8">
+      <div class="card-glass rounded-2xl p-8 shadow-glass">
         <slot />
       </div>
 
@@ -42,7 +50,7 @@
 
       <!-- Copyright -->
       <div class="mt-8 text-center text-xs text-slate-400 dark:text-slate-500">
-        &copy; {{ currentYear }} {{ siteName || 'GeekAI' }}. All rights reserved.
+        &copy; {{ currentYear }} {{ siteName }}. All rights reserved.
       </div>
     </div>
   </div>
@@ -52,8 +60,9 @@
 import { getSystemInfo } from '@/store/cache'
 import { ref, onMounted } from 'vue'
 
-const siteName = ref('')
+const siteName = ref('GeekAI')
 const siteLogo = ref('')
+const siteSubtitle = ref('集成多种 AI 模型，让创作触手可及')
 const currentYear = new Date().getFullYear()
 
 const particles = ref([])
@@ -96,7 +105,7 @@ onMounted(() => {
 
 <style scoped>
 .text-gradient {
-  @apply bg-gradient-to-r from-violet-600 to-violet-400 bg-clip-text text-transparent;
+  @apply bg-gradient-to-r from-violet-600 to-slate-500 bg-clip-text text-transparent;
 }
 
 /* Animated Gradient Orbs */
