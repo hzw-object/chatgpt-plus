@@ -40,41 +40,74 @@ html.dark {
   --text--hover: rgba(139, 92, 246, 0.2);
 }
 
+/* ============ Element Plus Overrides ============ */
 .el-dialog {
   --el-dialog-border-radius: 12px;
 }
 
-.login-box {
-  --el-component-size: 48px;
-}
-
-.btn-go {
-  background: var(--btnColor);
-  color: #fff;
+.el-input__wrapper {
+  background: var(--card-bg);
   border-radius: 8px;
-  padding: 8px 16px;
-  font-weight: 500;
-  transition: all 0.2s;
+  box-shadow: 0 0 0 1px var(--line-box) inset;
+  transition: box-shadow 0.15s ease;
 
   &:hover {
-    color: #fff;
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+    box-shadow: 0 0 0 1px #94a3b8 inset;
+  }
+
+  &.is-focus {
+    box-shadow: 0 0 0 1px #8b5cf6 inset, 0 0 0 3px rgba(139, 92, 246, 0.1);
   }
 }
 
-.btn-normal {
-  background: var(--theme-btn-color);
-  color: #fff;
-  border-radius: 8px;
-  padding: 8px 16px;
-  font-weight: 500;
+html.dark .el-input__wrapper {
+  box-shadow: 0 0 0 1px #334155 inset;
 
   &:hover {
-    color: #fff;
+    box-shadow: 0 0 0 1px #475569 inset;
+  }
+
+  &.is-focus {
+    box-shadow: 0 0 0 1px #8b5cf6 inset, 0 0 0 3px rgba(139, 92, 246, 0.2);
   }
 }
 
+.el-dialog__title {
+  font-weight: 600;
+  line-height: 28px;
+}
+
+.el-button--primary {
+  border-radius: 8px;
+  background: var(--el-color-primary);
+  border-color: var(--el-color-primary);
+
+  &:hover {
+    background: #7c3aed;
+    border-color: #7c3aed;
+  }
+}
+
+.el-button {
+  height: auto;
+  padding: 10px 20px;
+  border-radius: 8px;
+  transition: all 0.15s ease;
+}
+
+.el-select {
+  .el-input__wrapper {
+    border-radius: 8px;
+  }
+}
+
+/* ============ Vant Overrides ============ */
+.van-button--primary {
+  background: #8b5cf6;
+  border-color: #8b5cf6;
+}
+
+/* ============ Utility Classes ============ */
 .flex {
   display: flex;
   align-items: center;
@@ -104,33 +137,44 @@ html.dark {
   width: 100%;
 }
 
-.el-input__wrapper {
-  background: var(--card-bg);
+/* ============ Custom Buttons ============ */
+.btn-go {
+  background: var(--btnColor);
+  color: #fff;
   border-radius: 8px;
-}
-
-.el-dialog__title {
-  font-weight: 600;
-  line-height: 28px;
-}
-
-.el-button--primary {
-  border-radius: 8px;
-  background: var(--el-color-primary);
-  border-color: var(--el-color-primary);
+  padding: 8px 16px;
+  font-weight: 500;
+  transition: all 0.2s;
 
   &:hover {
-    background: #7c3aed;
-    border-color: #7c3aed;
+    color: #fff;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
   }
 }
 
-.el-button {
-  height: auto;
-  padding: 10px 20px;
+.btn-normal {
+  background: var(--theme-btn-color);
+  color: #fff;
+  border-radius: 8px;
+  padding: 8px 16px;
+  font-weight: 500;
+
+  &:hover {
+    color: #fff;
+  }
 }
 
-/* Scrollbar */
+/* ============ Box Card ============ */
+.box-card {
+  padding: 20px;
+  background-color: var(--card-bg);
+  border-radius: 12px;
+  border: 1px solid var(--line-box);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+/* ============ Scrollbar ============ */
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
@@ -157,6 +201,7 @@ html.dark ::-webkit-scrollbar-thumb {
   }
 }
 
+/* ============ Element Plus Message Box ============ */
 .el-message-box {
   --el-messagebox-border-radius: 12px;
   --el-messagebox-padding-primary: 24px;
@@ -171,31 +216,25 @@ html.dark ::-webkit-scrollbar-thumb {
   }
 }
 
-.sm-btn-theme {
-  background-color: rgba(139, 92, 246, 0.1) !important;
-  color: #8b5cf6 !important;
-  border: none;
-}
-
+/* ============ Element Plus Tags ============ */
 .el-tag, .el-tag--primary {
   --el-tag-bg-color: rgba(139, 92, 246, 0.1);
   --el-tag-text-color: #8b5cf6;
   border-radius: 6px;
 }
 
-.box-card {
-  padding: 20px;
-  background-color: var(--card-bg);
-  border-radius: 12px;
-  border: 1px solid var(--line-box);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+.sm-btn-theme {
+  background-color: rgba(139, 92, 246, 0.1) !important;
+  color: #8b5cf6 !important;
+  border: none;
 }
 
+/* ============ Element Plus Table ============ */
 .el-table th.el-table__cell {
   background-color: var(--chat-bg);
 }
 
-/* Sidebar styles */
+/* ============ Sidebar styles (legacy, for home.scss tab-box) ============ */
 .tab-box {
   background: var(--card-bg);
   border-right: 1px solid var(--line-box);
@@ -231,4 +270,9 @@ html.dark {
   .menu-list-item.active {
     background: rgba(139, 92, 246, 0.2);
   }
+}
+
+/* ============ Login Box ============ */
+.login-box {
+  --el-component-size: 48px;
 }
