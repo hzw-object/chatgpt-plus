@@ -7,17 +7,14 @@
 
     <!-- Animated Background -->
     <div class="pointer-events-none absolute inset-0 overflow-hidden">
-      <!-- Animated Gradient Orbs -->
       <div class="auth-orb auth-orb-1"></div>
       <div class="auth-orb auth-orb-2"></div>
       <div class="auth-orb auth-orb-3"></div>
 
-      <!-- Grid Pattern -->
       <div
-        class="absolute inset-0 bg-[linear-gradient(rgba(20,184,166,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(20,184,166,0.03)_1px,transparent_1px)] bg-[size:64px_64px]"
+        class="absolute inset-0 bg-[linear-gradient(rgba(139,92,246,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(139,92,246,0.03)_1px,transparent_1px)] bg-[size:64px_64px]"
       ></div>
 
-      <!-- Floating Particles -->
       <div v-for="p in particles" :key="p.id" class="auth-particle" :style="p.style"></div>
     </div>
 
@@ -25,24 +22,21 @@
     <div class="relative z-10 w-full max-w-md">
       <!-- Logo/Brand -->
       <div class="mb-8 text-center">
-        <!-- Custom Logo or Default Logo -->
-        <template v-if="settingsLoaded">
-          <div
-            class="mb-4 inline-flex h-16 w-16 items-center justify-center overflow-hidden rounded-2xl shadow-lg shadow-slate-500/30"
-          >
-            <img :src="siteLogo || '/logo.png'" alt="Logo" class="h-full w-full object-contain" />
-          </div>
-          <h1 class="text-gradient mb-2 text-3xl font-bold">
-            {{ siteName }}
-          </h1>
-          <p class="text-sm text-slate-500 dark:text-slate-400">
-            {{ siteSubtitle }}
-          </p>
-        </template>
+        <div
+          class="mb-4 inline-flex h-16 w-16 items-center justify-center overflow-hidden rounded-2xl shadow-lg shadow-slate-500/30"
+        >
+          <img :src="siteLogo || '/logo.png'" alt="Logo" class="h-full w-full object-contain" />
+        </div>
+        <h1 class="text-gradient mb-2 text-3xl font-bold">
+          {{ siteName || 'GeekAI' }}
+        </h1>
+        <p class="text-sm text-slate-500 dark:text-slate-400">
+          集成多种 AI 模型，让创作触手可及
+        </p>
       </div>
 
       <!-- Card Container -->
-      <div class="card-glass rounded-2xl p-8 shadow-glass">
+      <div class="card-glass rounded-2xl p-8 shadow-glass-md">
         <slot />
       </div>
 
@@ -53,35 +47,24 @@
 
       <!-- Copyright -->
       <div class="mt-8 text-center text-xs text-slate-400 dark:text-slate-500">
-        &copy; {{ currentYear }} {{ siteName }}. All rights reserved.
+        &copy; {{ currentYear }} {{ siteName || 'GeekAI' }}. All rights reserved.
       </div>
     </div>
   </div>
 </template>
 
-<script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
-import { useAppStore } from '@/stores'
-import { sanitizeUrl } from '@/utils/url'
+<script setup>
+import { getSystemInfo } from '@/store/cache'
+import { ref, onMounted } from 'vue'
 
-const appStore = useAppStore()
+const siteName = ref('')
+const siteLogo = ref('')
+const currentYear = new Date().getFullYear()
 
-const siteName = computed(() => appStore.siteName || 'Sub2API')
-const siteLogo = computed(() => sanitizeUrl(appStore.siteLogo || '', { allowRelative: true, allowDataUrl: true }))
-const siteSubtitle = computed(() => appStore.cachedPublicSettings?.site_subtitle || 'Subscription to API Conversion Platform')
-const settingsLoaded = computed(() => appStore.publicSettingsLoaded)
-
-const currentYear = computed(() => new Date().getFullYear())
-
-interface Particle {
-  id: number
-  style: Record<string, string>
-}
-
-const particles = ref<Particle[]>([])
+const particles = ref([])
 
 function generateParticles() {
-  const items: Particle[] = []
+  const items = []
   for (let i = 0; i < 30; i++) {
     const size = Math.random() * 4 + 2
     const x = Math.random() * 100
@@ -98,8 +81,8 @@ function generateParticles() {
         height: `${size}px`,
         animationDuration: `${duration}s`,
         animationDelay: `${delay}s`,
-        opacity: `${opacity}`
-      }
+        opacity: `${opacity}`,
+      },
     })
   }
   particles.value = items
@@ -107,13 +90,18 @@ function generateParticles() {
 
 onMounted(() => {
   generateParticles()
-  appStore.fetchPublicSettings()
+  getSystemInfo()
+    .then((res) => {
+      siteName.value = res.data.title || 'GeekAI'
+      siteLogo.value = res.data.logo || '/logo.png'
+    })
+    .catch(() => {})
 })
 </script>
 
 <style scoped>
 .text-gradient {
-  @apply bg-gradient-to-r from-violet-600 to-slate-500 bg-clip-text text-transparent;
+  @apply bg-gradient-to-r from-violet-600 to-violet-400 bg-clip-text text-transparent;
 }
 
 /* Animated Gradient Orbs */
