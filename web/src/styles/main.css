@@ -1,0 +1,264 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ===========================
+   CSS Variables - Violet Theme
+   =========================== */
+:root {
+  /* Primary Colors - Violet */
+  --color-primary: #8b5cf6;
+  --color-primary-hover: #7c3aed;
+  --color-primary-light: #a78bfa;
+
+  /* Background Colors */
+  --color-bg-light: #f8fafc;
+  --color-bg-dark: #020617;
+
+  /* Text Colors */
+  --color-text-light: #0f172a;
+  --color-text-dark: #f8fafc;
+
+  /* Border Colors */
+  --color-border-light: #e2e8f0;
+  --color-border-dark: #1e293b;
+
+  /* Card Colors */
+  --color-card-light: #ffffff;
+  --color-card-dark: #0f172a;
+}
+
+/* ===========================
+   Base Styles
+   =========================== */
+@layer base {
+  html {
+    @apply antialiased;
+  }
+
+  body {
+    @apply bg-slate-50 text-slate-900;
+    @apply dark:bg-slate-950 dark:text-slate-50;
+    font-family: Helvetica Neue, Helvetica, PingFang SC, Hiragino Sans GB, Microsoft YaHei, Arial, sans-serif;
+  }
+
+  /* Dark mode body class support (in addition to Tailwind's dark: prefix) */
+  body.dark {
+    @apply bg-slate-950 text-slate-50;
+  }
+
+  body.dark .bg-light {
+    @apply bg-slate-50;
+  }
+
+  body.dark .text-light {
+    @apply text-slate-900;
+  }
+
+  /* Typography */
+  h1 {
+    @apply text-2xl font-bold;
+  }
+
+  h2 {
+    @apply text-xl font-semibold;
+  }
+
+  h3 {
+    @apply text-lg font-medium;
+  }
+}
+
+/* ===========================
+   Component Styles
+   =========================== */
+@layer components {
+  /* Card Component */
+  .card {
+    @apply bg-white rounded-xl border border-slate-200;
+    @apply dark:bg-slate-900 dark:border-slate-800;
+    @apply shadow-sm;
+  }
+
+  /* Primary Button - Violet */
+  .btn {
+    @apply inline-flex items-center justify-center px-4 py-2 rounded-lg font-medium text-sm;
+    @apply transition-colors duration-200;
+    @apply focus:outline-none focus:ring-2 focus:ring-offset-2;
+  }
+
+  .btn-primary {
+    @apply bg-violet-600 text-white;
+    @apply hover:bg-violet-700;
+    @apply focus:ring-violet-500;
+    @apply dark:bg-violet-500 dark:hover:bg-violet-600;
+  }
+
+  .btn-secondary {
+    @apply border border-slate-300 bg-white text-slate-700;
+    @apply hover:bg-slate-50;
+    @apply dark:border-slate-600 dark:bg-slate-800 dark:text-slate-200;
+    @apply dark:hover:bg-slate-700;
+  }
+
+  /* Sidebar Styles */
+  .sidebar {
+    @apply fixed top-0 left-0 z-40 h-screen;
+    @apply bg-white dark:bg-slate-900;
+    @apply border-r border-slate-200 dark:border-slate-800;
+    @apply transition-all duration-300 flex flex-col;
+  }
+
+  .sidebar-header {
+    @apply h-16 flex items-center px-4 gap-3;
+    @apply border-b border-slate-200 dark:border-slate-800;
+  }
+
+  .sidebar-nav {
+    @apply flex-1 overflow-y-auto py-4 px-3;
+  }
+
+  .sidebar-nav::-webkit-scrollbar {
+    display: none;
+  }
+
+  .sidebar-nav {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .sidebar-link {
+    @apply flex items-center gap-3 px-3 py-2.5 rounded-lg;
+    @apply text-slate-700 dark:text-slate-300;
+    @apply hover:bg-slate-100 dark:hover:bg-slate-800;
+    @apply transition-colors duration-200;
+  }
+
+  .sidebar-link-active {
+    @apply bg-violet-50 text-violet-600;
+    @apply dark:bg-violet-900/20 dark:text-violet-400;
+  }
+
+  .sidebar-section-title {
+    @apply px-3 py-2 text-xs font-medium text-slate-500 uppercase tracking-wider;
+    @apply dark:text-slate-400;
+  }
+
+  /* Dropdown */
+  .dropdown {
+    @apply absolute right-0 mt-2 w-56;
+    @apply bg-white dark:bg-slate-900;
+    @apply border border-slate-200 dark:border-slate-800;
+    @apply rounded-xl shadow-lg;
+    @apply py-1;
+    @apply z-50;
+  }
+
+  .dropdown-item {
+    @apply flex items-center gap-3 px-4 py-2.5;
+    @apply text-sm text-slate-700 dark:text-slate-300;
+    @apply hover:bg-slate-100 dark:hover:bg-slate-800;
+    @apply transition-colors duration-150;
+    @apply cursor-pointer;
+  }
+
+  /* Ghost Button */
+  .btn-ghost {
+    @apply inline-flex items-center justify-center p-2 rounded-lg;
+    @apply text-slate-600 dark:text-slate-400;
+    @apply hover:bg-slate-100 dark:hover:bg-slate-800;
+    @apply transition-colors duration-200;
+  }
+
+  .btn-icon {
+    @apply inline-flex items-center justify-center;
+    @apply w-10 h-10 rounded-lg;
+  }
+
+  /* Input */
+  .input {
+    @apply w-full px-3 py-2 rounded-lg border;
+    @apply border-slate-300 dark:border-slate-600;
+    @apply bg-white dark:bg-slate-900;
+    @apply text-slate-900 dark:text-slate-100;
+    @apply placeholder-slate-400 dark:placeholder-slate-500;
+    @apply focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent;
+    @apply transition-colors duration-200;
+  }
+
+  /* Badge */
+  .badge {
+    @apply inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium;
+  }
+
+  .badge-violet {
+    @apply bg-violet-100 text-violet-700;
+    @apply dark:bg-violet-900/30 dark:text-violet-400;
+  }
+
+  .badge-slate {
+    @apply bg-slate-100 text-slate-700;
+    @apply dark:bg-slate-800 dark:text-slate-300;
+  }
+}
+
+/* ===========================
+   Utility Styles
+   =========================== */
+@layer utilities {
+  /* Scrollbar hide */
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  /* Glass effect */
+  .glass {
+    @apply bg-white/80 dark:bg-slate-900/80 backdrop-blur-md;
+  }
+}
+
+/* ===========================
+   Element Plus Overrides
+   =========================== */
+.dark {
+  .el-dialog {
+    @apply bg-slate-900;
+  }
+
+  .el-input {
+    @apply dark:bg-slate-800 dark:border-slate-600 dark:text-slate-100;
+  }
+
+  .el-button {
+    @apply dark:bg-slate-800 dark:border-slate-600 dark:text-slate-100;
+  }
+}
+
+/* ===========================
+   Transitions
+   =========================== */
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.2s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
+.dropdown-enter-active,
+.dropdown-leave-active {
+  transition: all 0.2s ease;
+}
+
+.dropdown-enter-from,
+.dropdown-leave-to {
+  opacity: 0;
+  transform: scale(0.95) translateY(-4px);
+}
