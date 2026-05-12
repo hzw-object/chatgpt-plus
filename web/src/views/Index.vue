@@ -10,7 +10,7 @@
     </div>
 
     <!-- Header -->
-    <header class="relative z-20 border-b border-slate-200/50 bg-white/70 backdrop-blur-xl dark:border-slate-800/50 dark:bg-slate-900/70">
+    <header class="w-full relative z-20 border-b border-slate-200/50 bg-white/70 backdrop-blur-xl dark:border-slate-800/50 dark:bg-slate-900/70">
       <nav class="mx-auto flex max-w-6xl items-center justify-between px-6 py-3.5">
         <div class="flex items-center gap-3">
           <div class="h-9 w-9 overflow-hidden rounded-xl shadow-sm ring-1 ring-slate-200/50 dark:ring-slate-700/50">
