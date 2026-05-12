@@ -21,22 +21,17 @@
     <!-- Content Container -->
     <div class="relative z-10 w-full max-w-md">
       <!-- Logo/Brand -->
-      <div class="mb-8 text-center">
-        <div
-          class="mb-4 inline-flex h-16 w-16 items-center justify-center overflow-hidden rounded-2xl shadow-lg shadow-slate-500/30"
-        >
+      <div class="mb-6 text-center">
+        <div class="mb-3 inline-flex h-14 w-14 items-center justify-center overflow-hidden rounded-2xl shadow-md ring-1 ring-slate-200/50 dark:ring-slate-700/50">
           <img :src="siteLogo || '/logo.png'" alt="Logo" class="h-full w-full object-contain" />
         </div>
-        <h1 class="text-gradient mb-2 text-3xl font-bold">
+        <h1 class="text-gradient text-2xl font-bold tracking-tight">
           {{ siteName || 'GeekAI' }}
         </h1>
-        <p class="text-sm text-slate-500 dark:text-slate-400">
-          集成多种 AI 模型，让创作触手可及
-        </p>
       </div>
 
       <!-- Card Container -->
-      <div class="card-glass rounded-2xl p-8 shadow-glass-md">
+      <div class="card rounded-2xl p-6 sm:p-8">
         <slot />
       </div>
 
