@@ -173,7 +173,7 @@ import { useRouter } from 'vue-router'
 const router = useRouter()
 
 const title = ref('')
-const logo = ref('')
+const logo = ref('/logo.png')
 const license = ref({ de_copy: true })
 const isLogin = ref(false)
 const navs = ref([])
